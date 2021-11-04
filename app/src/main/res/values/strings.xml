@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">BaseBallSeat</string>
+    <string name="title_activity_facebook_login">FacebookLogin</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="facebook_app_id">3946911215413003</string>
+    <string name="fb_login_protocol_scheme">fb3946911215413003</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string-array name="Changwon_NC">
+        <item>내야석</item>
+        <item>외야잔디석</item>
+        <item>미니테이블석</item>
+        <item>달&amp;아자부 테라스석</item>
+        <item>프리미엄테이블석</item>
+        <item>불펜석</item>
+        <item>테이블석</item>
+        <item>외야석</item>
+        <item>가족석</item>
+        <item>3층테라스석</item>
+        <item>스카이박스</item>
+        <item>포크벨리 바베큐석</item>
+        <item>라운드테이블석</item>
+        <item>3.4층 내야</item>
+        <item>프리미엄석</item>
+        <item>불펜가족석</item>
+        <item>피크닉테이블석</item>
+    </string-array>
+</resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "221395837730",
+    "project_id": "baseballseat-4392c",
+    "storage_bucket": "baseballseat-4392c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221395837730:android:f184c10066fecb6a78fb7b",
+        "android_client_info": {
+          "package_name": "com.example.baseballseat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221395837730-84cqgpof4765j34dpbl6q54ktn4t7nue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.baseballseat",
+            "certificate_hash": "98d5ee089ef3629deb57e938cfa359a8d970de88"
+          }
+        },
+        {
+          "client_id": "221395837730-fl5r3cgabt616ka2gdkh181hfu05a266.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTRpXU_BNEbNxgv_xcB5g5ErrXiv2hHyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221395837730-fl5r3cgabt616ka2gdkh181hfu05a266.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
