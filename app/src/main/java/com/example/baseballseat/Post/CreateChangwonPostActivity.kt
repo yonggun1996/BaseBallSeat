@@ -137,6 +137,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         //데이터를 실질적으로 삽입하는 코드
         myRef.setValue(hashmap)
 
+        //이전 페이지로 이동하는 코드
         val beforeIntent = Intent(this, ChangWonBoardActivity::class.java)
         startActivity(beforeIntent)
     }

@@ -4,14 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import com.example.baseballseat.*
 import com.example.baseballseat.Post.CreateChangwonPostActivity
-import com.example.baseballseat.LoginActivity
-import com.example.baseballseat.MainActivity
-import com.example.baseballseat.R
-import com.example.baseballseat.UserData
 import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_chang_won_board.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -53,6 +54,44 @@ class ChangWonBoardActivity : AppCompatActivity() {
             userData.username = ""
             startActivity(Intent(this, LoginActivity::class.java))
         }
+
+        var database = FirebaseDatabase.getInstance()
+        //데이터베이스에 있는 데이터를 읽어오는 코드
+        val childEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
+
+                // A new comment has been added, add it to the displayed list
+                val boarddata = dataSnapshot.getValue<BoardData>()
+                var bdataKey = dataSnapshot.key
+                var area = boarddata?.area
+                var bitmapString = boarddata?.bitmapString
+                var contents = boarddata?.contents
+                var seat = boarddata?.seat
+
+                Log.d(TAG, "key : ${bdataKey} / area : ${area} / seat : ${seat} / contents : ${contents}")
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "postComments:onCancelled", databaseError.toException())
+                Toast.makeText(this@ChangWonBoardActivity, "Failed to load comments.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+        val ref = database.getReference("changwon")
+        ref.addChildEventListener(childEventListener)
     }
 
     override fun onBackPressed() {
