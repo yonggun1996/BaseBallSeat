@@ -6,6 +6,7 @@ class BoardData(
     var bitmapString : String? = "",
     var contents : String? = "",
     var seat : String? = "",
-    var username : String? = "") {
+    var username : String? = "",
+    var date : String? = "") {
 
 }

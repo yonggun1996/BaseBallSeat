@@ -4,8 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseballseat.*
+import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.Post.CreateChangwonPostActivity
 import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
 import com.facebook.login.LoginManager
@@ -55,7 +58,12 @@ class ChangWonBoardActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
+        var boardDataList : ArrayList<BoardData> = ArrayList()
         var database = FirebaseDatabase.getInstance()
+
+        val adapter = BoardDataAdapter(boardDataList)
+        binding.NCBoardRv.adapter = adapter
+
         //데이터베이스에 있는 데이터를 읽어오는 코드
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
@@ -68,8 +76,11 @@ class ChangWonBoardActivity : AppCompatActivity() {
                 var bitmapString = boarddata?.bitmapString
                 var contents = boarddata?.contents
                 var seat = boarddata?.seat
+                boarddata?.date = dataSnapshot.key
 
                 Log.d(TAG, "key : ${bdataKey} / area : ${area} / seat : ${seat} / contents : ${contents}")
+                boardDataList.add(BoardData(area, bitmapString, contents, seat, username, bdataKey))
+                adapter.notifyDataSetChanged()
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
@@ -92,6 +103,10 @@ class ChangWonBoardActivity : AppCompatActivity() {
         }
         val ref = database.getReference("changwon")
         ref.addChildEventListener(childEventListener)
+
+        //RecyclerView를 설정하는 코드
+        Log.d(TAG, "listsize : ${boardDataList.size}")
+        binding.NCBoardRv.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onBackPressed() {
