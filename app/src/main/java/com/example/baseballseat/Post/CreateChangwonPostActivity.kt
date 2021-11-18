@@ -19,11 +19,14 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.net.toUri
 import com.example.baseballseat.R
+import com.example.baseballseat.UserData
 import com.example.baseballseat.board.ChangWonBoardActivity
 import com.example.baseballseat.databinding.ActivityCreatePostBinding
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import java.io.ByteArrayOutputStream
@@ -44,9 +47,11 @@ class CreateChangwonPostActivity : AppCompatActivity() {
     private var seat = ""//선택한 좌석
     private var username = ""//사용자 이름
     private var local = ""//구장명
+    private var userdate = UserData
     private var bitmapString = ""//사진을 Byte배열로 변환한 후 String으로 변환한 문자열
     private val REQUEST_IMAGE_CAPTURE = 1001//카메라 촬영에 성공했을 때 받는 코드
     private val REQUEST_GALLERY = 1002//갤러리를 호출할 때 받는 코드
+    private var storage = Firebase.storage
     private lateinit var currentPhotoPath: String//문자열 형태의 파일 경로
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +60,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        username = intent.getStringExtra("username").toString()
+        username = userdate.username.toString()
         local = intent.getStringExtra("local").toString()
 
         setCameraPermissoin()
@@ -93,6 +98,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
             Log.d(TAG, "area : ${area}")
             Log.d(TAG, "seat : ${seat}")
             Log.d(TAG, "contents : ${binding.ContentEt.text}")
+            Log.d(TAG, "user : ${username}")
 
             //이미지 업로드 기본 사진일 경우 토스트메시지를 띄운다
             //그렇지 않은 경우 업로드를 실행한다.
@@ -102,19 +108,37 @@ class CreateChangwonPostActivity : AppCompatActivity() {
             }else if(binding.ContentEt.text.toString() == ""){//내용을 입력하지 않은 경우
                 Toast.makeText(this, "글 내용을 작성해 주세요.", Toast.LENGTH_SHORT).show()
             }else{
-                //비트맵을 byte배열 반환 후 문자열로 만드는 과정
-                val drawable = binding.StadiumIv.drawable as BitmapDrawable
-                val bitmap = drawable.bitmap
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
-                val byte_Array = stream.toByteArray()
-                bitmapString = setBitmapString(byte_Array)
-                Log.d(TAG, "bitmapString : ${bitmapString}")
-
                 addDataBase()
+                uploadStorage()
             }
         }
 
+    }
+
+    private fun uploadStorage(){
+        val storageRef = storage.reference
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var datetime = sdf.format(Calendar.getInstance().time)
+        val link = storageRef.child("$local/$datetime.jpg")
+
+        //비트맵을 byte배열 반환 후 문자열로 만드는 과정
+        val drawable = binding.StadiumIv.drawable as BitmapDrawable
+        val bitmap = drawable.bitmap
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
+        val byte_Array = stream.toByteArray()
+
+        var uploadTask = link.putBytes(byte_Array)
+        uploadTask.addOnFailureListener {
+            Log.d(TAG, "uploadStorage: 이미지 업로드 실패")
+        }.addOnSuccessListener {
+            Log.d(TAG, "uploadStorage: 이미지 업로드 성공")
+        }
+
+        //이미지가 저장소에 업로드 되면 액티비티를 벗어난다
+        uploadTask.addOnSuccessListener {
+            finish()
+        }
     }
 
     private fun addDataBase(){
@@ -130,34 +154,11 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         var hashmap = HashMap<String, String>()
         hashmap.put("area", area)
         hashmap.put("seat", seat)
-        hashmap.put("bitmapString", bitmapString)
         hashmap.put("username", username)
         hashmap.put("contents", binding.ContentEt.text.toString())
 
         //데이터를 실질적으로 삽입하는 코드
         myRef.setValue(hashmap)
-
-        //이전 페이지로 이동하는 코드
-        val beforeIntent = Intent(this, ChangWonBoardActivity::class.java)
-        startActivity(beforeIntent)
-    }
-
-    private fun setBitmapString(byteArray: ByteArray) : String{
-        var sb = StringBuilder()
-        for(index in byteArray.indices){
-            sb.append(setByteToString(byteArray[index]))
-        }
-        return sb.toString()
-    }
-
-    private fun setByteToString(b : Byte) : String{
-        var sb = StringBuilder("00000000")
-        for(bit in 0..7){
-            if(((b.toInt() shr bit) and 1) > 0){
-                sb.setCharAt(7 - bit, '1')
-            }
-        }
-        return sb.toString()
     }
 
     //갤러리로 향하는 인텐트 설정정

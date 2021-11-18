@@ -27,6 +27,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
     private lateinit var username: String
     private lateinit var binding: ActivityChangWonBoardBinding//뷰 바인딩
     private var boardDataList = ArrayList<BoardData>()
+    private var database = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,61 +59,49 @@ class ChangWonBoardActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
+        readData(object : FirebaseCallBack {
+            override fun onCallback() {//callback 함수 구현
+                Log.d(TAG, "boardlist -> ${boardDataList.size}")
+                boardDataList.sortByDescending { it.date }//데아터 역순 정렬
+                //RecyclerView 세팅
+                val adapter = BoardDataAdapter(boardDataList)
+                binding.NCBoardRv.adapter = adapter
+                binding.NCBoardRv.layoutManager = LinearLayoutManager(this@ChangWonBoardActivity)
+            }
+        })
+    }
 
-        var database = FirebaseDatabase.getInstance()
-        val adapter = BoardDataAdapter(boardDataList)
-        //데이터베이스에 있는 데이터를 읽어오는 코드
-        val childEventListener = object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
+    //데이터베이스를 차례대로 불러오는 메소드
+    fun readData(firebaseCallBack: FirebaseCallBack){
+        val query = database.getReference("changwon")
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (postSnapshot in snapshot.children) {
+                    val children = postSnapshot.getValue<BoardData>()
+                    var key = postSnapshot.key
+                    var area = children?.area
+                    var contents = children?.contents
+                    var seat = children?.seat
+                    var user = children?.username
+                    children?.date = key
+                    children?.local = "changwon"
 
-                val boarddata = dataSnapshot.getValue<BoardData>()
-                var bdataKey = dataSnapshot.key
-                var area = boarddata?.area
-                var bitmapString = boarddata?.bitmapString
-                var contents = boarddata?.contents
-                var seat = boarddata?.seat
-                boarddata?.date = dataSnapshot.key
+                    Log.d(TAG, "key : ${key} / area : ${area} / seat : ${seat} / contents : ${contents}")
+                    boardDataList.add(BoardData(area, contents, seat, user, key, "changwon"))
+                }
 
-                Log.d(TAG, "key : ${bdataKey} / area : ${area} / seat : ${seat} / contents : ${contents}")
-                boardDataList.add(BoardData(area, bitmapString, contents, seat, username, bdataKey))
-                boardDataList.sortByDescending { it.date }//최신 게시물일수록 먼저 나와야 하기 때문에 날짜 순대로 내림차순 정렬
-                adapter.notifyDataSetChanged()
+                firebaseCallBack.onCallback()
             }
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(TAG, "onChildChanged: ${dataSnapshot.key}")
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(TAG, "onCancelled: ${error.toString()}")
             }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.key!!)
-            }
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.key!!)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "postComments:onCancelled", databaseError.toException())
-                Toast.makeText(
-                    this@ChangWonBoardActivity, "Failed to load comments.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-        val ref = database.getReference("changwon").orderByKey()
-        ref.addChildEventListener(childEventListener)
-
-
-        Log.d(TAG, "list size : ${boardDataList.size}")
-        binding.NCBoardRv.adapter = adapter
-        binding.NCBoardRv.layoutManager = LinearLayoutManager(this)
+        })
 
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val backIntent = Intent(this, MainActivity::class.java)
-        startActivity(backIntent)
+    //firebase realtimedatabase를 동기 방식으로 설정하기 위한 인터페이스
+    interface FirebaseCallBack{
+        fun onCallback()
     }
 }
