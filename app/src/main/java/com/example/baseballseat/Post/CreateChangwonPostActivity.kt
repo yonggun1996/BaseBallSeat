@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.lang.StringBuilder
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -48,7 +49,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
     private var username = ""//사용자 이름
     private var local = ""//구장명
     private var userdate = UserData
-    private var bitmapString = ""//사진을 Byte배열로 변환한 후 String으로 변환한 문자열
+    private var photoURI : Uri? = null//전역변수로 이미지의 uri를 담을 변수를 선언
     private val REQUEST_IMAGE_CAPTURE = 1001//카메라 촬영에 성공했을 때 받는 코드
     private val REQUEST_GALLERY = 1002//갤러리를 호출할 때 받는 코드
     private var storage = Firebase.storage
@@ -121,14 +122,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         var datetime = sdf.format(Calendar.getInstance().time)
         val link = storageRef.child("$local/$datetime.jpg")
 
-        //비트맵을 byte배열 반환 후 문자열로 만드는 과정
-        val drawable = binding.StadiumIv.drawable as BitmapDrawable
-        val bitmap = drawable.bitmap
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream)
-        val byte_Array = stream.toByteArray()
-
-        var uploadTask = link.putBytes(byte_Array)
+        var uploadTask = link.putFile(photoURI!!)
         uploadTask.addOnFailureListener {
             Log.d(TAG, "uploadStorage: 이미지 업로드 실패")
         }.addOnSuccessListener {
@@ -156,6 +150,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         hashmap.put("seat", seat)
         hashmap.put("username", username)
         hashmap.put("contents", binding.ContentEt.text.toString())
+        hashmap.put("imageURI", photoURI.toString())
 
         //데이터를 실질적으로 삽입하는 코드
         myRef.setValue(hashmap)
@@ -240,6 +235,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             val bitmap: Bitmap
             val file = File(currentPhotoPath)
+            photoURI = data?.data
 
             if (Build.VERSION.SDK_INT < 28) {//안드로이드 9.0보다 낮은 경우
                 bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
@@ -255,6 +251,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
             Log.d(TAG, "갤러리 오픈 코드 : ${REQUEST_GALLERY}")
             data?.data.let { uri ->
                 binding.StadiumIv.setImageURI(uri)
+                photoURI = uri
             }
         }
     }

@@ -7,6 +7,6 @@ class BoardData(
     var seat : String? = "",
     var username : String? = "",
     var date : String? = "",
-    var local : String? = "") {
-
+    var local : String? = "",
+    var imageURI : String? = "") {
 }

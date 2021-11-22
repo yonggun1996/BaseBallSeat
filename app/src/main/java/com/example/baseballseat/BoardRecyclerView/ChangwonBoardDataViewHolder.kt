@@ -9,6 +9,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestListener
 import com.example.baseballseat.BoardData
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -28,19 +29,9 @@ class ChangwonBoardDataViewHolder(v : View) : RecyclerView.ViewHolder(v){
     fun bind(item: BoardData){
         var storageRef = storage.reference
 
-        Log.d(TAG, "경로 : ${item.local}/${item.date}.jpg")
-        val pathReference = storageRef.child("${item.local}/${item.date}.jpg")
-        val ONE_MEGABYTE: Long = 1024 * 1024 * 5
-        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener {
-            var byteIs = ByteArrayInputStream(it)
-            var image = Drawable.createFromStream(byteIs,"")
-            Log.d(TAG, "image : ${image}")
-            Glide.with(view.context)
-                    .load(image)
-                    .into(view.stadium_Iv)
-        }.addOnFailureListener {
-            Log.d(TAG, "bind: 이미지 뷰에 로드 실패")
-        }
+        Glide.with(view.context)
+                .load(item.imageURI)
+                .into(view.stadium_Iv)
 
         view.username_Tv.text = item.username
         view.area_Tv.text = "구역 : " + item.area

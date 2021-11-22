@@ -83,11 +83,12 @@ class ChangWonBoardActivity : AppCompatActivity() {
                     var contents = children?.contents
                     var seat = children?.seat
                     var user = children?.username
+                    var imageURI = children?.imageURI
                     children?.date = key
                     children?.local = "changwon"
 
-                    Log.d(TAG, "key : ${key} / area : ${area} / seat : ${seat} / contents : ${contents}")
-                    boardDataList.add(BoardData(area, contents, seat, user, key, "changwon"))
+                    Log.d(TAG, "key : ${key} / area : ${area} / seat : ${seat} / contents : ${contents} / imageURI : ${imageURI}")
+                    boardDataList.add(BoardData(area, contents, seat, user, key, "changwon", imageURI))
                 }
 
                 firebaseCallBack.onCallback()
@@ -103,5 +104,11 @@ class ChangWonBoardActivity : AppCompatActivity() {
     //firebase realtimedatabase를 동기 방식으로 설정하기 위한 인터페이스
     interface FirebaseCallBack{
         fun onCallback()
+    }
+
+    //액티비티를 벗어나면 리스트에 있는 내용들을 지우고 다시 화면으로 돌아올 때 firebase의 데이터베이스에 데이터를 채운다.
+    override fun onStop() {
+        super.onStop()
+        boardDataList.clear()
     }
 }
