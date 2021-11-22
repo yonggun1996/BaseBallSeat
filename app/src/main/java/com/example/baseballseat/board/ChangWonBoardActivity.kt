@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseballseat.*
@@ -38,6 +39,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.boardprogressBar.visibility = View.VISIBLE
         username = userData.username.toString()
         Log.d(TAG, "창원 NC 파크 페이지")
         Log.d(TAG, "User : ${username}")
@@ -67,6 +69,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
                 val adapter = BoardDataAdapter(boardDataList)
                 binding.NCBoardRv.adapter = adapter
                 binding.NCBoardRv.layoutManager = LinearLayoutManager(this@ChangWonBoardActivity)
+                binding.boardprogressBar.visibility = View.INVISIBLE
             }
         })
     }

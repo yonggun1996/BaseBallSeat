@@ -131,6 +131,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
 
         //이미지가 저장소에 업로드 되면 액티비티를 벗어난다
         uploadTask.addOnSuccessListener {
+            binding.postprogressBar.visibility = View.INVISIBLE
             finish()
         }
     }
@@ -138,6 +139,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
     private fun addDataBase(){
         //Firebase에 데이터를 삽입하는 과정
         //현재날짜를 설정하는 코드
+        binding.postprogressBar.visibility = View.VISIBLE
         var database = Firebase.database
         var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var datetime = sdf.format(Calendar.getInstance().time)
