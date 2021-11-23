@@ -58,7 +58,8 @@ class ChangWonBoardActivity : AppCompatActivity() {
                 .logOut()//이 라인을 적지 않으면 Firebase에만 로그아웃이 되고, Facebook은 로그아웃이 안된다.
             Log.d(TAG, "로그아웃 시도")
             userData.username = ""
-            startActivity(Intent(this, LoginActivity::class.java))
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
         }
 
         readData(object : FirebaseCallBack {

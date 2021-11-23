@@ -46,14 +46,15 @@ class MainActivity : AppCompatActivity() {
         LoginManager.getInstance().logOut()//이 라인을 적지 않으면 Firebase에만 로그아웃이 되고, Facebook은 로그아웃이 안된다.
         Log.d(TAG, "로그아웃 시도")
         userData.username = ""
-        startActivity(Intent(this, LoginActivity::class.java))
+        val loginIntent = Intent(this, LoginActivity::class.java)
+        startActivity(loginIntent)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         Log.d(TAG, "onBackPressed: 시스템 종료")
         moveTaskToBack(true)
-        finish()
+        finishAffinity()//앱을 완전히 종료 시키기 위한 함수
         android.os.Process.killProcess(android.os.Process.myPid())
     }
 }

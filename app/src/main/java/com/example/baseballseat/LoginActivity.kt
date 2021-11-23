@@ -150,8 +150,8 @@ class LoginActivity : AppCompatActivity(){
             userData.username = user.displayName.toString()
             val intent = Intent(this, MainActivity::class.java)
             //intent.putExtra("Username", user.displayName)//로그인한 계정의 이름도 인텐트에 묶어 보낸다
-            startActivity(intent)
             finish()
+            startActivity(intent)
         }
     }
 
@@ -161,7 +161,7 @@ class LoginActivity : AppCompatActivity(){
         super.onBackPressed()
         Log.d(TAG, "onBackPressed: 시스템 종료")
         moveTaskToBack(true)
-        finish()
+        finishAffinity()//앱을 완전히 종료시키기 위한 함수
         android.os.Process.killProcess(android.os.Process.myPid())
     }
 
