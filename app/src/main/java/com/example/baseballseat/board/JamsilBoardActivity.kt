@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseballseat.*
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.Post.CreateChangwonPostActivity
-import com.example.baseballseat.R
+import com.example.baseballseat.Post.CreateJamsilPostActivity
 import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
+import com.example.baseballseat.databinding.ActivityJamsilBoardBinding
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -21,13 +21,13 @@ import kotlinx.android.synthetic.main.activity_chang_won_board.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 /*
-창원 NC파크 게시물 확인하는 페이지
+잠실야구장 게시물 확인하는 페이지
  */
-class ChangWonBoardActivity : AppCompatActivity() {
-    val TAG = "ChangWonBoardActivity"
+class JamsilBoardActivity : AppCompatActivity() {
+    val TAG = "JamsilBoardActivity"
     var userData = UserData
     private lateinit var username: String
-    private lateinit var binding: ActivityChangWonBoardBinding//뷰 바인딩
+    private lateinit var binding: ActivityJamsilBoardBinding//뷰 바인딩
     private var boardDataList = ArrayList<BoardData>()
     private var database = FirebaseDatabase.getInstance()
 
@@ -36,18 +36,18 @@ class ChangWonBoardActivity : AppCompatActivity() {
 
         // setContentView(R.layout.activity_chang_won_board)
         //뷰바인딩 설정 코드
-        binding = ActivityChangWonBoardBinding.inflate(layoutInflater)
+        binding = ActivityJamsilBoardBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         binding.boardprogressBar.visibility = View.VISIBLE
         username = userData.username.toString()
-        Log.d(TAG, "창원 NC 파크 페이지")
+        Log.d(TAG, "잠실야구장 파크 페이지")
         Log.d(TAG, "User : ${username}")
 
         binding.createBtn.setOnClickListener {
-            val createpostIntent = Intent(this, CreateChangwonPostActivity::class.java)
-            createpostIntent.putExtra("local", "changwon")
+            val createpostIntent = Intent(this, CreateJamsilPostActivity::class.java)
+            createpostIntent.putExtra("local", "Jamsil")
 
             startActivity(createpostIntent)
         }
@@ -69,8 +69,8 @@ class ChangWonBoardActivity : AppCompatActivity() {
                 boardDataList.sortByDescending { it.date }//데아터 역순 정렬
                 //RecyclerView 세팅
                 val adapter = BoardDataAdapter(boardDataList)
-                binding.NCBoardRv.adapter = adapter
-                binding.NCBoardRv.layoutManager = LinearLayoutManager(this@ChangWonBoardActivity)
+                binding.jamsilBoardRv.adapter = adapter
+                binding.jamsilBoardRv.layoutManager = LinearLayoutManager(this@JamsilBoardActivity)
                 binding.boardprogressBar.visibility = View.INVISIBLE
             }
         })
@@ -78,7 +78,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
 
     //데이터베이스를 차례대로 불러오는 메소드
     fun readData(firebaseCallBack: FirebaseCallBack){
-        val query = database.getReference("changwon")
+        val query = database.getReference("Jamsil")
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (postSnapshot in snapshot.children) {
@@ -90,10 +90,10 @@ class ChangWonBoardActivity : AppCompatActivity() {
                     var user = children?.username
                     var imageURI = children?.imageURI
                     children?.date = key
-                    children?.local = "changwon"
+                    children?.local = "jamsil"
 
                     Log.d(TAG, "key : ${key} / area : ${area} / seat : ${seat} / contents : ${contents} / imageURI : ${imageURI}")
-                    boardDataList.add(BoardData(area, contents, seat, user, key, "changwon", imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, user, key, "jamsil", imageURI))
                 }
 
                 firebaseCallBack.onCallback()

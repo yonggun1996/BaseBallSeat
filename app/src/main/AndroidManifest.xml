@@ -18,6 +18,8 @@
         android:theme="@style/Theme.BaseBallSeat.NoActionBar">
         <activity android:name=".Post.CreateChangwonPostActivity"></activity>
         <activity android:name=".board.ChangWonBoardActivity" />
+        <activity android:name=".Post.CreateJamsilPostActivity"/>
+        <activity android:name=".board.JamsilBoardActivity"/>
         <activity android:name=".FacebookLogin" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />

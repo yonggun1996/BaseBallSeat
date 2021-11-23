@@ -11,7 +11,7 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
-    <string-array name="Changwon_NC">
+    <string-array name="Changwon_Seat">
         <item>내야석</item>
         <item>외야잔디석</item>
         <item>미니테이블석</item>

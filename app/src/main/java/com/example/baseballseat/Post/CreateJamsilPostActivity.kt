@@ -41,8 +41,8 @@ import kotlin.collections.HashMap
 /*
 게시물을 업로드 하기 위한 Activity 코틀린 코드
  */
-class CreateChangwonPostActivity : AppCompatActivity() {
-    var TAG = "CreateChangwonPostActivity"
+class CreateJamsilPostActivity : AppCompatActivity() {
+    var TAG = "CreateJamsilPostActivity"
     private lateinit var binding: ActivityCreatePostBinding
     private var area = ""//선택한 구역
     private var seat = ""//선택한 좌석
@@ -67,8 +67,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         setCameraPermissoin()
 
         //구장의 좌석 이름
-        val seat_list : List<String> = mutableListOf("내야석","외야잔디석","미니테이블석","달&아자부 테라스석","프리미엄테이블석","불펜석","테이블석","외야석"
-                                                ,"가족석","3층테라스석","스카이박스","포크벨리 바베큐석","라운드테이블석","3.4층 내야","프리미엄석","불펜가족석","피크닉테이블석")
+        val seat_list : List<String> = mutableListOf("프리미엄석","블루석","네이비석","1루 테이블석","3루 테이블석","오렌지석","익사이팅석","레드석","외야그린석")
 
         //좌석 선택
         binding.seatSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,seat_list)
@@ -214,11 +213,11 @@ class CreateChangwonPostActivity : AppCompatActivity() {
     private fun setCameraPermissoin() {
         val permission = object : PermissionListener{
             override fun onPermissionGranted() {//권한을 사용자가 허용했을 때
-                Toast.makeText(this@CreateChangwonPostActivity, "권한을 수락하셨습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateJamsilPostActivity, "권한을 수락하셨습니다.", Toast.LENGTH_SHORT).show()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {//권한을 사용자가 거부했을 때
-                Toast.makeText(this@CreateChangwonPostActivity, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateJamsilPostActivity, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -269,20 +268,16 @@ class CreateChangwonPostActivity : AppCompatActivity() {
     }
 
     fun setAreaList(seat : String){
-        var list : List<String> = mutableListOf("101","102","103","104","105","106","107","108","109","110","119","120","121","122","123","124","125")
+        var list : List<String> = mutableListOf()
         when(seat){
-            "내야석" -> list = mutableListOf("101","102","103","104","105","106","107","108","109","110","119","120","121","122","123","124","125")
-            "미니테이블석" -> list = mutableListOf("111","118")
-            "테이블석" -> list = mutableListOf("112","113","114","115","116","117")
-            "외야석" -> list = mutableListOf("130","131","132","133","134","135","136","137","138")
-            "스카이박스" -> list = mutableListOf("305","306","307","308","312","313","314","315","321","322","323","324","327","328","329","330"
-                                        ,"405","406","407","408","412","413","414","416","420","422","423","424","427","428","429","430")
-            "포크벨리 바베큐석" -> list = mutableListOf("126","127","131","132","134","135","136")
-            "라운드 테이블석" -> list = mutableListOf("201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223")
-            "3.4층 내야" -> list = mutableListOf("301","302","303","304","309","310","311","325","326","331","332","333","401","402","403","404","409","410","411","415","417","418","419","421","425","426","431","432","433")
-            "프리미엄석" -> list = mutableListOf("112","113","114")
-            "피크닉테이블석" -> list = mutableListOf("101","102","103","104","122","123","124","125")
-            else -> list = mutableListOf("")//구역이 따로 없는 좌석
+            "1루 테이블석" -> list = mutableListOf("110","111","212","213")
+            "3루 테이블석" -> list = mutableListOf("112","113","214","215")
+            "블루석" -> list = mutableListOf("107","108","109","114","115","116","209","210","211","216","217","218")
+            "오렌지석" -> list = mutableListOf("205","206","207","208","219","220","221","222")
+            "레드석" -> list = mutableListOf("101","102","103","104","105","106","117","118","119","120","121","122","201","202","203","204","223","224","225","226")
+            "네이비석" -> list = mutableListOf("301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318",
+                                            "319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334")
+            "외야그린석" -> list = mutableListOf("401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422")
         }
 
         binding.areaSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list)

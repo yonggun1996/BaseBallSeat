@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".board.ChangWonBoardActivity">
+    tools:context=".board.JamsilBoardActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/NC"
+        android:background="@color/grass"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/ghanachocolate"
-            android:text="창원 NC 파크"
+            android:text="잠실야구장"
             android:textColor="#FFF"
             android:textSize="25sp" />
 
@@ -44,9 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/addbtn"
+            android:src="@drawable/ic_action_name"
             app:tint="@null"
-            app:backgroundTint="@color/NC"
+            app:backgroundTint="@color/grass"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/floationbtn"
+            android:background="@drawable/jamsilbtn"
             android:text="로그아웃"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/NC_BoardRv"
+        android:id="@+id/jamsil_BoardRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

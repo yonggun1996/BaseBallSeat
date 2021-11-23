@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Post.CreateChangwonPostActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -45,7 +44,7 @@
             android:textSize="25sp" />
 
         <Spinner
-            android:id="@+id/seatCH_Spinner"
+            android:id="@+id/seat_Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp" />
@@ -69,7 +68,7 @@
             android:textSize="25sp" />
 
         <Spinner
-            android:id="@+id/areaCH_Spinner"
+            android:id="@+id/area_Spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp" />
