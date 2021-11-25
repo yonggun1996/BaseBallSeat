@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.baseballseat">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -16,11 +18,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BaseBallSeat.NoActionBar">
-        <activity android:name=".Post.CreateChangwonPostActivity"></activity>
+        <activity android:name=".board.SuwonBoardActivity"></activity>
+        <activity android:name=".Post.CreateChangwonPostActivity" />
         <activity android:name=".board.ChangWonBoardActivity" />
-        <activity android:name=".Post.CreateJamsilPostActivity"/>
-        <activity android:name=".board.JamsilBoardActivity"/>
-        <activity android:name=".FacebookLogin" />
+        <activity android:name=".Post.CreateJamsilPostActivity" />
+        <activity android:name=".board.JamsilBoardActivity" />
+        <activity android:name=".Post.CreateSuwonPostActivity"/>
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
 
@@ -53,17 +56,14 @@
         </activity>
 
         <provider
-            android:authorities="com.example.baseballseat.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.baseballseat.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
-
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

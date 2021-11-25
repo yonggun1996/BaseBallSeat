@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.baseballseat.board.ChangWonBoardActivity
 import com.example.baseballseat.board.JamsilBoardActivity
+import com.example.baseballseat.board.SuwonBoardActivity
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -44,6 +45,12 @@ class MainActivity : AppCompatActivity() {
             val Jamsil_nextIntent = Intent(this, JamsilBoardActivity::class.java)
             Jamsil_nextIntent.putExtra("username",username)
             startActivity(Jamsil_nextIntent)
+        }
+
+        KT_Btn.setOnClickListener {
+            val Suwon_nextIntent = Intent(this, SuwonBoardActivity::class.java)
+            Suwon_nextIntent.putExtra("username",username)
+            startActivity(Suwon_nextIntent)
         }
 
     }

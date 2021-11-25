@@ -237,7 +237,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             val bitmap: Bitmap
             val file = File(currentPhotoPath)
-            photoURI = data?.data
+            photoURI = file.toUri()
 
             if (Build.VERSION.SDK_INT < 28) {//안드로이드 9.0보다 낮은 경우
                 bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))

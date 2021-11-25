@@ -41,8 +41,8 @@ import kotlin.collections.HashMap
 /*
 게시물을 업로드 하기 위한 Activity 코틀린 코드
  */
-class CreateJamsilPostActivity : AppCompatActivity() {
-    var TAG = "CreateJamsilPostActivity"
+class CreateSuwonPostActivity : AppCompatActivity() {
+    var TAG = "CreateSuwonPostActivity"
     private lateinit var binding: ActivityCreatePostBinding
     private var area = ""//선택한 구역
     private var seat = ""//선택한 좌석
@@ -67,7 +67,8 @@ class CreateJamsilPostActivity : AppCompatActivity() {
         setCameraPermissoin()
 
         //구장의 좌석 이름
-        val seat_list : List<String> = mutableListOf("프리미엄석","블루석","네이비석","1루 테이블석","3루 테이블석","오렌지석","익사이팅석","레드석","외야그린석")
+        val seat_list : List<String> = mutableListOf("지니존","비씨카드존","콕콕114존(중앙지정석)","Y박스존(1루 테이블석)","PAYCO존(3루 테이블석)","응원지정석",
+                                                    "내야지정석","스카이존","익시아팅석","ON식당존","테라스석","외야잔디/자유석")
 
         //좌석 선택
         binding.seatSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,seat_list)
@@ -213,11 +214,11 @@ class CreateJamsilPostActivity : AppCompatActivity() {
     private fun setCameraPermissoin() {
         val permission = object : PermissionListener{
             override fun onPermissionGranted() {//권한을 사용자가 허용했을 때
-                Toast.makeText(this@CreateJamsilPostActivity, "권한을 수락하셨습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateSuwonPostActivity, "권한을 수락하셨습니다.", Toast.LENGTH_SHORT).show()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {//권한을 사용자가 거부했을 때
-                Toast.makeText(this@CreateJamsilPostActivity, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateSuwonPostActivity, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -236,7 +237,9 @@ class CreateJamsilPostActivity : AppCompatActivity() {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             val bitmap: Bitmap
             val file = File(currentPhotoPath)
-            photoURI = file.toUri()
+            photoURI = file.toUri()//카메라 이미지는 해당 코드처럼 해야 null이 발생하지 않는다.
+
+            Log.d(TAG, "setPhotoURI : ${photoURI}")
 
             if (Build.VERSION.SDK_INT < 28) {//안드로이드 9.0보다 낮은 경우
                 bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
@@ -253,6 +256,7 @@ class CreateJamsilPostActivity : AppCompatActivity() {
             data?.data.let { uri ->
                 binding.StadiumIv.setImageURI(uri)
                 photoURI = uri
+                Log.d(TAG, "setPhotoURI : ${photoURI}")
             }
         }
     }
@@ -270,14 +274,17 @@ class CreateJamsilPostActivity : AppCompatActivity() {
     fun setAreaList(seat : String){
         var list : List<String> = mutableListOf()
         when(seat){
-            "1루 테이블석" -> list = mutableListOf("110","111","212","213")
-            "3루 테이블석" -> list = mutableListOf("112","113","214","215")
-            "블루석" -> list = mutableListOf("107","108","109","114","115","116","209","210","211","216","217","218")
-            "오렌지석" -> list = mutableListOf("205","206","207","208","219","220","221","222")
-            "레드석" -> list = mutableListOf("101","102","103","104","105","106","117","118","119","120","121","122","201","202","203","204","223","224","225","226")
-            "네이비석" -> list = mutableListOf("301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318",
-                                            "319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334")
-            "외야그린석" -> list = mutableListOf("401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422")
+            "지니존" -> list = mutableListOf("좌측","중간","우측")
+            "비씨카드존" -> list = mutableListOf("좌측","중간","우측")
+            "콕콕114존(중앙지정석)" -> list = mutableListOf("216","217","218","219","220","221","222","223","313","314","315","316","317","318","319","320")
+            "Y박스존(1루 테이블석)" -> list = mutableListOf("113","114","115","213","214","215")
+            "PAYCO존(3루 테이블석)" -> list = mutableListOf("116","117","118","224","225","226")
+            "응원지정석" -> list = mutableListOf("106","107","108","109","110","111","112","119","120","121","122","123","124","125","206","207","208","209","210","211","212",
+                                                "227","228","229","230","231","232","233","303","304","305","306","307","308","309","310","311","312","321","322","323","324","325","326","327","328","329","330")
+            "내야지정석" -> list = mutableListOf("101","102","103","104","105","126","127","128","129","130","201","202","203","204","205","234","235","236","237","238","301","302","331","332")
+            "스카이존" -> list = mutableListOf("401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420",
+                                                "421","422","423","424","425","426","427","428","429","430","431","432")
+            "ON식당존" -> list = mutableListOf("501","502","503","504","505")
         }
 
         binding.areaSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list)
