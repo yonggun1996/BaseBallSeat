@@ -2,9 +2,11 @@ package com.example.baseballseat.BoardRecyclerView
 
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
+import java.io.File
 import kotlin.experimental.or
 
 class ChangwonBoardDataViewHolder(v : View) : RecyclerView.ViewHolder(v){
@@ -27,11 +30,11 @@ class ChangwonBoardDataViewHolder(v : View) : RecyclerView.ViewHolder(v){
     private var storage = Firebase.storage
 
     fun bind(item: BoardData){
-        var storageRef = storage.reference
+        var storageRef = storage.reference.child("${item.local}/${item.date}.jpg")
 
         Glide.with(view.context)
-                .load(item.imageURI)
-                .into(view.stadium_Iv)
+            .load(item.imageURI)
+            .into(view.stadium_Iv)
 
         view.username_Tv.text = item.username
         view.area_Tv.text = "구역 : " + item.area

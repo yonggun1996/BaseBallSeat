@@ -109,7 +109,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
             }else if(binding.ContentEt.text.toString() == ""){//내용을 입력하지 않은 경우
                 Toast.makeText(this, "글 내용을 작성해 주세요.", Toast.LENGTH_SHORT).show()
             }else{
-                addDataBase()
+                binding.postprogressBar.visibility = View.VISIBLE
                 uploadStorage()
             }
         }
@@ -127,6 +127,27 @@ class CreateChangwonPostActivity : AppCompatActivity() {
             Log.d(TAG, "uploadStorage: 이미지 업로드 실패")
         }.addOnSuccessListener {
             Log.d(TAG, "uploadStorage: 이미지 업로드 성공")
+            link.downloadUrl.addOnSuccessListener {
+                Log.d(TAG, "uploadStorage: $it")
+                //Firebase에 데이터를 삽입하는 과정
+                //현재날짜를 설정하는 코드
+                var database = Firebase.database
+                var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                var datetime = sdf.format(Calendar.getInstance().time)
+                Log.d(TAG, "sdf : ${datetime}")
+                val myRef = database.getReference(local).child(datetime)
+
+                //HashMap 자료구조로 구역, 좌석, 사진 byte 문자열, 유저명을 담는다
+                var hashmap = HashMap<String, String>()
+                hashmap.put("area", area)
+                hashmap.put("seat", seat)
+                hashmap.put("username", username)
+                hashmap.put("contents", binding.ContentEt.text.toString())
+                hashmap.put("imageURI", it.toString())
+
+                //데이터를 실질적으로 삽입하는 코드
+                myRef.setValue(hashmap)
+            }
         }
 
         //이미지가 저장소에 업로드 되면 액티비티를 벗어난다
@@ -134,28 +155,6 @@ class CreateChangwonPostActivity : AppCompatActivity() {
             binding.postprogressBar.visibility = View.INVISIBLE
             finish()
         }
-    }
-
-    private fun addDataBase(){
-        //Firebase에 데이터를 삽입하는 과정
-        //현재날짜를 설정하는 코드
-        binding.postprogressBar.visibility = View.VISIBLE
-        var database = Firebase.database
-        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        var datetime = sdf.format(Calendar.getInstance().time)
-        Log.d(TAG, "sdf : ${datetime}")
-        val myRef = database.getReference(local).child(datetime)
-
-        //HashMap 자료구조로 구역, 좌석, 사진 byte 문자열, 유저명을 담는다
-        var hashmap = HashMap<String, String>()
-        hashmap.put("area", area)
-        hashmap.put("seat", seat)
-        hashmap.put("username", username)
-        hashmap.put("contents", binding.ContentEt.text.toString())
-        hashmap.put("imageURI", photoURI.toString())
-
-        //데이터를 실질적으로 삽입하는 코드
-        myRef.setValue(hashmap)
     }
 
     //갤러리로 향하는 인텐트 설정정
@@ -224,8 +223,8 @@ class CreateChangwonPostActivity : AppCompatActivity() {
 
         TedPermission.with(this)
             .setPermissionListener(permission)
-            .setRationaleMessage("게시물 업로드시 관련 사진이 꼭 있어야 합니다.")
-            .setDeniedMessage("카메라 권한을 거부해 게시물을 업로드 할 수 없습니다.")
+            .setRationaleMessage("게시물 업로드시 관련 사진이 꼭 있어야 합니다.")//권한이 필요한 이유 명시
+            .setDeniedMessage("카메라 권한을 거부해 게시물을 업로드 할 수 없습니다.")//권한을 거부한 경우 띄우는 메시지
             .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
             .check()
     }

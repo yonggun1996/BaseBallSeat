@@ -106,6 +106,10 @@ class ChangWonBoardActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     //firebase realtimedatabase를 동기 방식으로 설정하기 위한 인터페이스
     interface FirebaseCallBack{
         fun onCallback()
@@ -115,5 +119,6 @@ class ChangWonBoardActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         boardDataList.clear()
+        Log.d(TAG, "boardDataList Clear")
     }
 }
