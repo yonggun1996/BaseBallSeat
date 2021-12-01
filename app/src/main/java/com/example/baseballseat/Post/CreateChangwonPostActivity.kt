@@ -44,6 +44,8 @@ import kotlin.collections.HashMap
  */
 class CreateChangwonPostActivity : AppCompatActivity() {
     var TAG = "CreateChangwonPostActivity"
+    val SUCESS = 9999
+    val FAIL = 9998
     private lateinit var binding: ActivityCreatePostBinding
     private var area = ""//선택한 구역
     private var seat = ""//선택한 좌석
@@ -151,6 +153,8 @@ class CreateChangwonPostActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             Log.d(TAG, "DB 업로드 성공")
                             binding.postprogressBar.visibility = View.INVISIBLE
+                            var intent = Intent()
+                            setResult(SUCESS, intent)
                             finish()
                         }.addOnFailureListener {
                             Toast.makeText(this, "DB에 업로드 실패", Toast.LENGTH_SHORT).show()
@@ -297,5 +301,12 @@ class CreateChangwonPostActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        var intent = Intent()
+        setResult(FAIL, intent)
+        finish()
     }
 }
