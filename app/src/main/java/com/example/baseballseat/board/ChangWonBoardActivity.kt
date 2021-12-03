@@ -145,6 +145,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
                     var imageURI = doc.get("imageURI").toString()
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
+                    //Log.d(TAG, "area : $area / seat : $seat / contents : $contents / imageURI : $imageURI / date : $date / username : $username")
 
                     boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
                 }

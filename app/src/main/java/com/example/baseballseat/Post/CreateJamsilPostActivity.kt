@@ -134,15 +134,12 @@ class CreateJamsilPostActivity : AppCompatActivity() {
                 Log.d(TAG, "uploadStorage: $it")
                 //Firebase에 데이터를 삽입하는 과정
                 //현재날짜를 설정하는 코드
-                var database = Firebase.database
-                var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                var datetime = sdf.format(Calendar.getInstance().time)
-
                 //HashMap 자료구조로 구역, 좌석, 사진 byte 문자열, 유저명을 담는다
                 var hashmap = HashMap<String, String>()
                 hashmap.put("area", area)
                 hashmap.put("seat", seat)
                 hashmap.put("username", username)
+                hashmap.put("User", userdate.user?.uid.toString())
                 hashmap.put("contents", binding.ContentEt.text.toString())
                 hashmap.put("date", datetime)
                 hashmap.put("imageURI", it.toString())

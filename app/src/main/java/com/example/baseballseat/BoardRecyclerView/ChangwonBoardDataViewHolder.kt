@@ -25,6 +25,7 @@ class ChangwonBoardDataViewHolder(v : View) : RecyclerView.ViewHolder(v){
         view.area_Tv.text = "구역 : " + item.area
         view.seat_Tv.text = "좌석 : " + item.seat
         view.content_Tv.text = item.contents
+        Log.d(TAG, "contents : ${item.contents}")
         view.date_Tv.text = "날짜 : " + item.date
         Log.d(TAG, "지역 : ${item.local}")
     }

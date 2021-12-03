@@ -25,6 +25,7 @@ import com.example.baseballseat.UserData
 import com.example.baseballseat.board.ChangWonBoardActivity
 import com.example.baseballseat.databinding.ActivityCreatePostBinding
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.gun0912.tedpermission.PermissionListener
@@ -43,6 +44,8 @@ import kotlin.collections.HashMap
  */
 class CreateSuwonPostActivity : AppCompatActivity() {
     var TAG = "CreateSuwonPostActivity"
+    val SUCESS = 9999
+    val FAIL = 9998
     private lateinit var binding: ActivityCreatePostBinding
     private var area = ""//선택한 구역
     private var seat = ""//선택한 좌석
@@ -53,6 +56,7 @@ class CreateSuwonPostActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1001//카메라 촬영에 성공했을 때 받는 코드
     private val REQUEST_GALLERY = 1002//갤러리를 호출할 때 받는 코드
     private var storage = Firebase.storage
+    private val db = Firebase.firestore
     private lateinit var currentPhotoPath: String//문자열 형태의 파일 경로
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,13 +114,13 @@ class CreateSuwonPostActivity : AppCompatActivity() {
                 Toast.makeText(this, "글 내용을 작성해 주세요.", Toast.LENGTH_SHORT).show()
             }else{
                 binding.postprogressBar.visibility = View.VISIBLE
-                uploadStorage()
+                upload()
             }
         }
 
     }
 
-    private fun uploadStorage(){
+    private fun upload(){
         val storageRef = storage.reference
         var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var datetime = sdf.format(Calendar.getInstance().time)
@@ -131,29 +135,35 @@ class CreateSuwonPostActivity : AppCompatActivity() {
                 Log.d(TAG, "uploadStorage: $it")
                 //Firebase에 데이터를 삽입하는 과정
                 //현재날짜를 설정하는 코드
-                var database = Firebase.database
-                var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                var datetime = sdf.format(Calendar.getInstance().time)
-                Log.d(TAG, "sdf : ${datetime}")
-                val myRef = database.getReference(local).child(datetime)
 
-                //HashMap 자료구조로 구역, 좌석, 사진 byte 문자열, 유저명을 담는다
-                var hashmap = HashMap<String, String>()
-                hashmap.put("area", area)
-                hashmap.put("seat", seat)
-                hashmap.put("username", username)
-                hashmap.put("contents", binding.ContentEt.text.toString())
-                hashmap.put("imageURI", it.toString())
+                link.downloadUrl.addOnSuccessListener {
+                    var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    var datetime = sdf.format(Calendar.getInstance().time)
+                    Log.d(TAG, "sdf : ${datetime}")
 
-                //데이터를 실질적으로 삽입하는 코드
-                myRef.setValue(hashmap)
+                    //HashMap 자료구조로 구역, 좌석, 사진 byte 문자열, 유저명을 담는다
+                    var hashmap = HashMap<String, String>()
+                    hashmap.put("area", area)
+                    hashmap.put("seat", seat)
+                    hashmap.put("username", username)
+                    hashmap.put("User", userdate.user?.uid.toString())
+                    hashmap.put("contents", binding.ContentEt.text.toString())
+                    hashmap.put("date", datetime)
+                    hashmap.put("imageURI", it.toString())
+
+                    db.collection(local).document()
+                            .set(hashmap)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "DB 업로드 성공")
+                                binding.postprogressBar.visibility = View.INVISIBLE
+                                var intent = Intent()
+                                setResult(SUCESS, intent)
+                                finish()
+                            }.addOnFailureListener {
+                                Toast.makeText(this, "DB에 업로드 실패", Toast.LENGTH_SHORT).show()
+                            }
+                }
             }
-        }
-
-        //이미지가 저장소에 업로드 되면 액티비티를 벗어난다
-        uploadTask.addOnSuccessListener {
-            binding.postprogressBar.visibility = View.INVISIBLE
-            finish()
         }
     }
 
