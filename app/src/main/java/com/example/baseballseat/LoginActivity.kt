@@ -97,7 +97,7 @@ class LoginActivity : AppCompatActivity(){
         super.onStart()
         val currentUser = auth.currentUser
         val userData = UserData
-        userData.username = currentUser?.displayName.toString()
+        userData.user = currentUser
         Log.d(TAG, "유저 정보 : ${currentUser?.displayName}")
         move_MainActivity(currentUser)
     }
@@ -147,9 +147,8 @@ class LoginActivity : AppCompatActivity(){
     private fun move_MainActivity(user : FirebaseUser?){
         if(user != null){
             val userData = UserData
-            userData.username = user.displayName.toString()
+            userData.user = user
             val intent = Intent(this, MainActivity::class.java)
-            //intent.putExtra("Username", user.displayName)//로그인한 계정의 이름도 인텐트에 묶어 보낸다
             finish()
             startActivity(intent)
         }

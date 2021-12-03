@@ -8,6 +8,7 @@ import com.example.baseballseat.board.ChangWonBoardActivity
 import com.example.baseballseat.board.JamsilBoardActivity
 import com.example.baseballseat.board.SuwonBoardActivity
 import com.facebook.login.LoginManager
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,8 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(TAG, "MainActivity 입니다.")
 
-        val username = userData.username
-        user_tv.text = "${username}님 환영합니다"
+        user_tv.text = "${userData.user?.displayName}님 환영합니다"
 
         //로그아웃 버튼 클릭시
         logout_Btn.setOnClickListener {
@@ -37,19 +37,16 @@ class MainActivity : AppCompatActivity() {
         //창원 NC파크 선택
         NC_Btn.setOnClickListener {
             val NC_nextIntent = Intent(this, ChangWonBoardActivity::class.java)
-            NC_nextIntent.putExtra("username",username)
             startActivity(NC_nextIntent)
         }
 
         Jamsil_Btn.setOnClickListener {
             val Jamsil_nextIntent = Intent(this, JamsilBoardActivity::class.java)
-            Jamsil_nextIntent.putExtra("username",username)
             startActivity(Jamsil_nextIntent)
         }
 
         KT_Btn.setOnClickListener {
             val Suwon_nextIntent = Intent(this, SuwonBoardActivity::class.java)
-            Suwon_nextIntent.putExtra("username",username)
             startActivity(Suwon_nextIntent)
         }
 
@@ -59,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         Firebase.auth.signOut()
         LoginManager.getInstance().logOut()//이 라인을 적지 않으면 Firebase에만 로그아웃이 되고, Facebook은 로그아웃이 안된다.
         Log.d(TAG, "로그아웃 시도")
-        userData.username = ""
+        userData.user = null
         val loginIntent = Intent(this, LoginActivity::class.java)
         startActivity(loginIntent)
     }

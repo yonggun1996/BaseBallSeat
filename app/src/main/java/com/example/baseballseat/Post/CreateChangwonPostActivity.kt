@@ -1,11 +1,9 @@
 package com.example.baseballseat.Post
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -18,23 +16,17 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import com.example.baseballseat.R
 import com.example.baseballseat.UserData
-import com.example.baseballseat.board.ChangWonBoardActivity
 import com.example.baseballseat.databinding.ActivityCreatePostBinding
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.lang.StringBuilder
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -65,7 +57,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        username = userdate.username.toString()
+        username = userdate.user?.displayName.toString()
         local = intent.getStringExtra("local").toString()
 
         setCameraPermissoin()
@@ -143,6 +135,7 @@ class CreateChangwonPostActivity : AppCompatActivity() {
                 hashmap.put("area", area)
                 hashmap.put("seat", seat)
                 hashmap.put("username", username)
+                hashmap.put("User", userdate.user?.uid.toString())
                 hashmap.put("contents", binding.ContentEt.text.toString())
                 hashmap.put("date", datetime)
                 hashmap.put("imageURI", it.toString())

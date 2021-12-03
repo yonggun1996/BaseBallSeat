@@ -61,7 +61,7 @@ class CreateSuwonPostActivity : AppCompatActivity() {
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        username = userdate.username.toString()
+        username = userdate.user?.displayName.toString()
         local = intent.getStringExtra("local").toString()
 
         setCameraPermissoin()

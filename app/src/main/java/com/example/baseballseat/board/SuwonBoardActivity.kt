@@ -41,7 +41,7 @@ class SuwonBoardActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.boardprogressBar.visibility = View.VISIBLE
-        username = userData.username.toString()
+        username = userData.user?.displayName.toString()
         Log.d(TAG, "수원 Ktwiz 파크 페이지")
         Log.d(TAG, "User : ${username}")
 
@@ -58,7 +58,7 @@ class SuwonBoardActivity : AppCompatActivity() {
             LoginManager.getInstance()
                     .logOut()//이 라인을 적지 않으면 Firebase에만 로그아웃이 되고, Facebook은 로그아웃이 안된다.
             Log.d(TAG, "로그아웃 시도")
-            userData.username = ""
+            userData.user = null
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         }

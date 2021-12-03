@@ -5,26 +5,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.*
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.Post.CreateChangwonPostActivity
-import com.example.baseballseat.R
 import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.core.Query
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_chang_won_board.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.math.log
 
 /*
 창원 NC파크 게시물 확인하는 페이지
@@ -52,7 +43,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
-        username = userData.username.toString()
+        username = userData.user?.displayName.toString()
         Log.d(TAG, "창원 NC 파크 페이지")
         Log.d(TAG, "User : ${username}")
 
@@ -69,7 +60,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
             LoginManager.getInstance()
                 .logOut()//이 라인을 적지 않으면 Firebase에만 로그아웃이 되고, Facebook은 로그아웃이 안된다.
             Log.d(TAG, "로그아웃 시도")
-            userData.username = ""
+            userData.user = null
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         }
@@ -108,7 +99,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
         }
     }
 
-    //RecyclerView가 아래까지 와서 FireStore의 데이터를 10개 더 확인하는 메서드
+    //RecyclerView가 아래까지 와서 FireStore의 데이터를 5개 더 확인하는 메서드
     //코드 출처 : https://www.youtube.com/watch?v=HQgJvHXsNOQ
     private fun add_RecyclerView(){
         Log.d(TAG, "lastResult : $lastResult")
