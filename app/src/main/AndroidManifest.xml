@@ -18,12 +18,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BaseBallSeat.NoActionBar">
-        <activity android:name=".board.SuwonBoardActivity"></activity>
+        <activity android:name=".Mydata.ChangwonMyDataActivity"></activity>
+        <activity android:name=".board.SuwonBoardActivity" />
         <activity android:name=".Post.CreateChangwonPostActivity" />
         <activity android:name=".board.ChangWonBoardActivity" />
         <activity android:name=".Post.CreateJamsilPostActivity" />
         <activity android:name=".board.JamsilBoardActivity" />
-        <activity android:name=".Post.CreateSuwonPostActivity"/>
+        <activity android:name=".Post.CreateSuwonPostActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.*
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
+import com.example.baseballseat.Mydata.ChangwonMyDataActivity
 import com.example.baseballseat.Post.CreateChangwonPostActivity
 import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
 import com.facebook.login.LoginManager
@@ -63,6 +64,12 @@ class ChangWonBoardActivity : AppCompatActivity() {
             userData.user = null
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
+        }
+
+        //내 정보 버튼 클릭시
+        binding.myDataBtn.setOnClickListener {
+            val myDataIntent = Intent(this, ChangwonMyDataActivity::class.java)
+            startActivity(myDataIntent)
         }
 
         adapter = BoardDataAdapter(boardDataList)
@@ -139,6 +146,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
                 Log.d(TAG, "sucess : $snapshot")
                 boardDataList.clear()
                 for(doc in snapshot!!){//저장해둔 데이터를 리스트에 담는 과정
+                    Log.d(TAG, "doc : ${doc.id}")
                     var area = doc.get("area").toString()
                     var seat = doc.get("seat").toString()
                     var contents = doc.get("contents").toString()
