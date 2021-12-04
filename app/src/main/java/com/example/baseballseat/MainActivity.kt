@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.baseballseat.board.ChangWonBoardActivity
+import com.example.baseballseat.board.GocheokBoardActivity
 import com.example.baseballseat.board.JamsilBoardActivity
 import com.example.baseballseat.board.SuwonBoardActivity
 import com.facebook.login.LoginManager
@@ -48,6 +49,11 @@ class MainActivity : AppCompatActivity() {
         KT_Btn.setOnClickListener {
             val Suwon_nextIntent = Intent(this, SuwonBoardActivity::class.java)
             startActivity(Suwon_nextIntent)
+        }
+        
+        Kiwoom_Btn.setOnClickListener {
+            val Geocheok_nextIntent = Intent(this, GocheokBoardActivity::class.java)
+            startActivity(Geocheok_nextIntent)
         }
 
     }

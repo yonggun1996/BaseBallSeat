@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".board.JamsilBoardActivity">
+    tools:context=".board.GocheokBoardActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grass"
+        android:background="@color/Kiwoom"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/ghanachocolate"
-            android:text="잠실야구장"
+            android:text="고척스카이돔"
             android:textColor="#FFF"
             android:textSize="25sp" />
 
@@ -45,7 +45,7 @@
             android:layout_marginLeft="5dp"
             android:src="@drawable/ic_action_name"
             app:tint="@null"
-            app:backgroundTint="@color/grass"
+            app:backgroundTint="@color/Kiwoom"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/jamsilbtn"
+            android:background="@drawable/gocheokbtn"
             android:text="로그아웃"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +66,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/jamsil_BoardRv"
+        android:id="@+id/gocheok_BoardRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
