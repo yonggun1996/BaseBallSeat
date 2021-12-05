@@ -4,10 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.baseballseat.board.ChangWonBoardActivity
-import com.example.baseballseat.board.GocheokBoardActivity
-import com.example.baseballseat.board.JamsilBoardActivity
-import com.example.baseballseat.board.SuwonBoardActivity
+import com.example.baseballseat.board.*
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -37,23 +34,28 @@ class MainActivity : AppCompatActivity() {
 
         //창원 NC파크 선택
         NC_Btn.setOnClickListener {
-            val NC_nextIntent = Intent(this, ChangWonBoardActivity::class.java)
-            startActivity(NC_nextIntent)
+            val ncnextIntent = Intent(this, ChangWonBoardActivity::class.java)
+            startActivity(ncnextIntent)
         }
 
         Jamsil_Btn.setOnClickListener {
-            val Jamsil_nextIntent = Intent(this, JamsilBoardActivity::class.java)
-            startActivity(Jamsil_nextIntent)
+            val jamsil_nextIntent = Intent(this, JamsilBoardActivity::class.java)
+            startActivity(jamsil_nextIntent)
         }
 
         KT_Btn.setOnClickListener {
-            val Suwon_nextIntent = Intent(this, SuwonBoardActivity::class.java)
-            startActivity(Suwon_nextIntent)
+            val suwon_nextIntent = Intent(this, SuwonBoardActivity::class.java)
+            startActivity(suwon_nextIntent)
         }
         
         Kiwoom_Btn.setOnClickListener {
-            val Geocheok_nextIntent = Intent(this, GocheokBoardActivity::class.java)
-            startActivity(Geocheok_nextIntent)
+            val geocheok_nextIntent = Intent(this, GocheokBoardActivity::class.java)
+            startActivity(geocheok_nextIntent)
+        }
+
+        KIA_Btn.setOnClickListener {
+            val gwangju_nextIntent = Intent(this, GwangjuBoardActivity::class.java)
+            startActivity(gwangju_nextIntent)
         }
 
     }
