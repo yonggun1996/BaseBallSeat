@@ -7,84 +7,75 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.baseballseat.*
+import com.example.baseballseat.BoardData
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
-import com.example.baseballseat.Post.CreateChangwonPostActivity
-import com.example.baseballseat.Post.CreateJamsilPostActivity
-import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
-import com.example.baseballseat.databinding.ActivityJamsilBoardBinding
+import com.example.baseballseat.LoginActivity
+import com.example.baseballseat.Post.DaeguPostActivity
+import com.example.baseballseat.UserData
+import com.example.baseballseat.databinding.ActivityDaeguBoardBinding
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_chang_won_board.*
-import kotlinx.android.synthetic.main.activity_main.*
 
-/*
-잠실야구장 게시물 확인하는 페이지
- */
-class JamsilBoardActivity : AppCompatActivity() {
-    val TAG = "JamsilBoardActivity"
-    val UPLOADSUCESSCODE = 9999
-    var userData = UserData
-    private lateinit var username: String
-    private lateinit var binding: ActivityJamsilBoardBinding//뷰 바인딩
-    private var boardDataList = ArrayList<BoardData>()
-    private lateinit var adapter : BoardDataAdapter
+class DaeguBoardActivity : AppCompatActivity() {
+
+    /* 대구 삼성 라이온즈 파크 게시판 */
+    private val TAG = "DaeguBoardActivity"
     private lateinit var db : FirebaseFirestore
+    private lateinit var adapter : BoardDataAdapter
+    private var boardDataList = ArrayList<BoardData>()
+    private lateinit var binding: ActivityDaeguBoardBinding
     private lateinit var lastResult : DocumentSnapshot
+    private var username = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //setContentView(R.layout.activity_daegu_board)
 
-        // setContentView(R.layout.activity_chang_won_board)
-        //뷰바인딩 설정 코드
-        binding = ActivityJamsilBoardBinding.inflate(layoutInflater)
+        binding = ActivityDaeguBoardBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
-        username = userData.user?.displayName.toString()
-        Log.d(TAG, "잠실야구장 파크 페이지")
-        Log.d(TAG, "User : ${username}")
+        username = UserData.user?.displayName.toString()
 
         binding.createBtn.setOnClickListener {
-            val createpostIntent = Intent(this, CreateJamsilPostActivity::class.java)
-            createpostIntent.putExtra("local", "Jamsil")
-
+            val createpostIntent = Intent(this, DaeguPostActivity::class.java)
+            createpostIntent.putExtra("local","Daegu")
             startActivity(createpostIntent)
         }
 
-        //로그아웃 버튼 클릭시
+        //로그이웃 버튼 클릭
         binding.logoutBtn.setOnClickListener {
             Firebase.auth.signOut()
             LoginManager.getInstance()
                 .logOut()//이 라인을 적지 않으면 Firebase에만 로그아웃이 되고, Facebook은 로그아웃이 안된다.
             Log.d(TAG, "로그아웃 시도")
-            userData.user = null
+            UserData.user = null
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         }
 
         adapter = BoardDataAdapter(boardDataList)
-        binding.jamsilBoardRv.adapter = adapter
-        binding.jamsilBoardRv.layoutManager = LinearLayoutManager(this)
+        binding.daeguBoardRv.adapter = adapter
+        binding.daeguBoardRv.layoutManager = LinearLayoutManager(this)
+
         update_RecyclerView()
 
-        binding.jamsilBoardRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        binding.daeguBoardRv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val lastItemPosition =
-                    (binding.jamsilBoardRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-                val itemTotalCount = binding.jamsilBoardRv.adapter?.itemCount?.minus(1)
+                    (binding.daeguBoardRv.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 
+                val itemTotalCount = binding.daeguBoardRv.adapter?.itemCount?.minus(1)
                 Log.d(TAG, "lastItemPosition: $lastItemPosition")
                 Log.d(TAG, "itemTotalCount: $itemTotalCount")
+
                 if (lastItemPosition == itemTotalCount) {
                     Log.d(TAG, "RecyclerView Last")
                     add_RecyclerView()
@@ -93,48 +84,8 @@ class JamsilBoardActivity : AppCompatActivity() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        Log.d(TAG, "RESULT_OK: $RESULT_OK")
-        Log.d(TAG, "requestCode: $requestCode")
-        if(resultCode == RESULT_OK && requestCode == UPLOADSUCESSCODE){
-            update_RecyclerView()
-        }
-    }
-
-    //RecyclerView가 아래까지 와서 FireStore의 데이터를 5개 더 확인하는 메서드
-    private fun add_RecyclerView(){
-        Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Jamsil")//창원 구장에 대한 정보만 추출
-            .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
-            .startAfter(lastResult)
-            .limit(5)
-            .addSnapshotListener  { snapshot, e ->
-                binding.boardprogressBar.visibility = View.VISIBLE
-                Log.d(TAG, "sucess : $snapshot")
-                for(doc in snapshot!!){//저장해둔 데이터를 리스트에 담는 과정
-                    var area = doc.get("area").toString()
-                    var seat = doc.get("seat").toString()
-                    var contents = doc.get("contents").toString()
-                    var imageURI = doc.get("imageURI").toString()
-                    var date = doc.get("date").toString()
-                    var username = doc.get("username").toString()
-
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
-                }
-
-                if(snapshot.size() > 0){
-                    lastResult = snapshot.documents.get(snapshot.size() - 1)
-                }
-
-                adapter.notifyDataSetChanged()//어댑터가 변경된 부분이 있다면 변경
-                binding.boardprogressBar.visibility = View.INVISIBLE
-            }
-    }
-
-    private fun update_RecyclerView(){
-        val docRef = db.collection("Jamsil")//창원 구장에 대한 정보만 추출
+    private fun update_RecyclerView() {
+        val docRef = db.collection("Daegu")//대구 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -149,7 +100,7 @@ class JamsilBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Jamsil",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, "Daegu",imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -160,9 +111,32 @@ class JamsilBoardActivity : AppCompatActivity() {
             }
     }
 
-    //액티비티를 벗어나면 리스트에 있는 내용들을 지우고 다시 화면으로 돌아올 때 firebase의 데이터베이스에 데이터를 채운다.
-    override fun onStop() {
-        super.onStop()
-        boardDataList.clear()
+    private fun add_RecyclerView() {
+        Log.d(TAG, "lastResult : $lastResult")
+        val docRef = db.collection("Daegu")//대구 구장에 대한 정보만 추출
+            .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
+            .startAfter(lastResult)
+            .limit(5)
+            .addSnapshotListener  { snapshot, e ->
+                binding.boardprogressBar.visibility = View.VISIBLE
+                Log.d(TAG, "sucess : $snapshot")
+                for(doc in snapshot!!){//저장해둔 데이터를 리스트에 담는 과정
+                    var area = doc.get("area").toString()
+                    var seat = doc.get("seat").toString()
+                    var contents = doc.get("contents").toString()
+                    var imageURI = doc.get("imageURI").toString()
+                    var date = doc.get("date").toString()
+                    var username = doc.get("username").toString()
+
+                    boardDataList.add(BoardData(area, contents, seat, username, date, "Daegu",imageURI))
+                }
+
+                if(snapshot.size() > 0){
+                    lastResult = snapshot.documents.get(snapshot.size() - 1)
+                }
+
+                adapter.notifyDataSetChanged()//어댑터가 변경된 부분이 있다면 변경
+                binding.boardprogressBar.visibility = View.INVISIBLE
+            }
     }
 }

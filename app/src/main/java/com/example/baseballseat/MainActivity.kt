@@ -63,6 +63,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(busan_nextIntent)
         }
 
+        Samsung_Btn.setOnClickListener {
+            val daegu_nextIntent = Intent(this, DaeguBoardActivity::class.java)
+            startActivity(daegu_nextIntent)
+        }
+
     }
 
     private fun signOut(){

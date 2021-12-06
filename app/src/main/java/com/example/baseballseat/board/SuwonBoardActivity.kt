@@ -117,7 +117,7 @@ class SuwonBoardActivity : AppCompatActivity() {
                         var date = doc.get("date").toString()
                         var username = doc.get("username").toString()
 
-                        boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                        boardDataList.add(BoardData(area, contents, seat, username, date, "Suwon",imageURI))
                     }
 
                     if(snapshot.size() > 0){
@@ -145,7 +145,7 @@ class SuwonBoardActivity : AppCompatActivity() {
                         var date = doc.get("date").toString()
                         var username = doc.get("username").toString()
 
-                        boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                        boardDataList.add(BoardData(area, contents, seat, username, date, "Suwon",imageURI))
                     }
 
                     if(snapshot.size() > 0){

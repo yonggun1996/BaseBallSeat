@@ -30,9 +30,9 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BusanPostActivity : AppCompatActivity() {
+class DaeguPostActivity : AppCompatActivity() {
 
-    private val TAG = "BusanPostActivity"
+    private val TAG = "DaeguPostActivity"
     val SUCESS = 9999
     private lateinit var binding: ActivityCreatePostBinding
     private lateinit var currentPhotoPath: String//문자열 형태의 파일 경로
@@ -47,17 +47,17 @@ class BusanPostActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_busan_post)
+        //setContentView(R.layout.activity_daegu_post)
 
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         local = intent.getStringExtra("local").toString()
-        setCameraPermissoin()
+        setCameraPermission()
 
-        val seat_list : List<String> = mutableListOf("중앙탁자석","와이드탁자석","응원탁자석","내야탁자석","익사이팅석","3루단체석","로케트배터리존",
-                                                    "내야필드석","내야상단석","중앙상단석","외야석")
+        val seat_list : List<String> = mutableListOf("VIP석","중앙테이블석","3루테이블석","1루테이블석","블루존","원정응원석","익사이팅석(3루)","익사이팅석(1루)",
+                                                    "내야지정석(3루)","내야지정석(1루)","SKY지정석(하단)","SKY지정석(상단)","파티플로어석","외야미니테이블석","외야지정석","외야테이블석","외야페밀리석")
 
         binding.seatSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, seat_list)
         binding.seatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
@@ -83,7 +83,7 @@ class BusanPostActivity : AppCompatActivity() {
             Log.d(TAG, "area : ${area}")
             Log.d(TAG, "seat : ${seat}")
             Log.d(TAG, "contents : ${binding.ContentEt.text}")
-            Log.d(TAG, "user : ${UserData.user?.displayName}")
+            Log.d(TAG, "user : ${UserData.user?.displayName.toString()}")
 
             //이미지 업로드 기본 사진일 경우 토스트메시지를 띄운다
             //그렇지 않은 경우 업로드를 실행한다.
@@ -177,8 +177,6 @@ class BusanPostActivity : AppCompatActivity() {
         }
     }
 
-    //이미지 파일 생성 과정(임시적으로)
-    @Throws(IOException::class)
     private fun createImageFile(): File? {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())//날짜의 형태로 저장하기 위해 설정
@@ -197,14 +195,14 @@ class BusanPostActivity : AppCompatActivity() {
     //카메라 권한을 체크하는 라이브러리
     //각종 권한을 허용하는 라이브러리
     //출처 : https://github.com/ParkSangGwon/TedPermission
-    private fun setCameraPermissoin() {
+    private fun setCameraPermission() {
         val permission = object : PermissionListener {
             override fun onPermissionGranted() {//권한을 사용자가 허용했을 때
-                Toast.makeText(this@BusanPostActivity, "권한을 수락하셨습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DaeguPostActivity, "권한을 수락하셨습니다.", Toast.LENGTH_SHORT).show()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {//권한을 사용자가 거부했을 때
-                Toast.makeText(this@BusanPostActivity, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DaeguPostActivity, "권한을 거부하셨습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -251,24 +249,31 @@ class BusanPostActivity : AppCompatActivity() {
             sendBroadcast(mediaScanIntent)
         }
         Toast.makeText(this, "사진이 갤러리에 저장했습니다.",Toast.LENGTH_SHORT).show()
-
     }
 
     private fun setAreaList(seat: String) {
         var list : List<String> = mutableListOf()
         when(seat){
-            "중앙탁자석" -> list = mutableListOf("021","022","023","024","031","032","033","034","041","044")
-            "와이드탁자석" -> list = mutableListOf("321","322","323","324")
-            "응원탁자석" -> list = mutableListOf("121","131")
-            "내야탁자석" -> list = mutableListOf("122","123","124","125","127","132","133","135","137","323","324","325","333","335")
-            "익사이팅존" -> list = mutableListOf("1루","3루")
-            "3루단체석" -> list = mutableListOf("327","337")
-            "내야필드석" -> list = mutableListOf("111","112","113","114","115","122","123","124","125","311","312","313","314","323","324")
-            "내야상단석" -> list = mutableListOf("116","126","127","132","133","134","135","136","137","142","143",
-                                                "315","316","325","326","333","334","335","336","342","343")
-            "중앙상단석" -> list = mutableListOf("051","052","053","054","055","056","057")
-            "외야석" -> list = mutableListOf("721","722","723","724","732","733","734","921","922","923","924","925","931","932","933","934","935")
-
+            "VIP석" -> list = mutableListOf("1","2","3")
+            "중앙테이블석" -> list = mutableListOf("1","2","3")
+            "3루테이블석" -> list = mutableListOf("1","2","3","4")
+            "1루테이블석" -> list = mutableListOf("1","2","3","4")
+            "익사이팅석(3루)" -> list = mutableListOf("1","2","3")
+            "익사이팅석(1루)" -> list = mutableListOf("1","2","3")
+            "블루존" -> list = mutableListOf("1","2","3","4","5","6","7")
+            "원정응원석" -> list = mutableListOf("1","2","3","4","5")
+            "내야지정석(3루)" -> list = mutableListOf("8","9","10","11","12")
+            "내야지정석(1루)" -> list = mutableListOf("6","7","8","9","10","11","12")
+            "SKY지정석(하단)" -> list = mutableListOf("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18",
+                                                    "19","20","21","22","23","24","25","26","27","28","29","30","31")
+            "SKY지정석(상단)" -> list = mutableListOf("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18",
+                                                    "19","20","21","22","23","24","25","26","27","28","29","30","31")
+            "외야미니테이블석" -> list = mutableListOf("HL1","HL2","HL3","HL4","HL5","HL6","HL7","HL8","HL9","HL10",
+                                                    "HR1","HR2","HR3","HR4","HR5","HR6","HR7","HR8","HR9","HR10")
+            "외야테이블석" -> list = mutableListOf("TL0","TL9","TR0","TR1","TR2","TR3","TR4","TR5","TR6","TR7","TR09","TR10")
+            "외야지정석" -> list = mutableListOf("LF1","LF2","LF3","LF4","LF5","LF6","LF7","LF8","LF9","LF10",
+                "RF1","RF2","RF3","RF4","RF5","RF6","RF7","RF8","RF9","RF10")
+            "외야패일리석" -> list = mutableListOf("F!","F2")
         }
 
         binding.areaSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, list)
@@ -278,7 +283,7 @@ class BusanPostActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-
+                TODO("Not yet implemented")
             }
         }
     }

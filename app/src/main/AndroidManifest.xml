@@ -18,7 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BaseBallSeat.NoActionBar">
-        <activity android:name=".Post.BusanPostActivity"></activity>
+        <activity android:name=".Post.DaeguPostActivity"></activity>
+        <activity android:name=".Post.DaeguActivity" />
+        <activity android:name=".board.DaeguBoardActivity" />
+        <activity android:name=".Post.BusanPostActivity" />
         <activity android:name=".board.BusanBoardActivity" />
         <activity android:name=".Post.GwangjuPostActivity" />
         <activity android:name=".board.GwangjuBoardActivity" />

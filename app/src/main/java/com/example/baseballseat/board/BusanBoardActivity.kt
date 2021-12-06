@@ -86,7 +86,7 @@ class BusanBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView() {
-        val docRef = db.collection("Busan")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection("Busan")//부산 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -101,7 +101,7 @@ class BusanBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, "Busan",imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -114,7 +114,7 @@ class BusanBoardActivity : AppCompatActivity() {
 
     private fun add_RecyclerView() {
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Busan")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection("Busan")//부산 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .startAfter(lastResult)
             .limit(5)
