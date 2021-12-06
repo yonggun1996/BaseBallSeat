@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(gwangju_nextIntent)
         }
 
+        Lotte_Btn.setOnClickListener {
+            val busan_nextIntent = Intent(this, BusanBoardActivity::class.java)
+            startActivity(busan_nextIntent)
+        }
+
     }
 
     private fun signOut(){
