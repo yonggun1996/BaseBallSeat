@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(daegu_nextIntent)
         }
 
+        SSG_Btn.setOnClickListener {
+            val incheon_Intent = Intent(this, IncheonBoardActivity::class.java)
+            startActivity(incheon_Intent)
+        }
+
     }
 
     private fun signOut(){
