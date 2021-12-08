@@ -73,6 +73,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(incheon_Intent)
         }
 
+        Hanhwa_Btn.setOnClickListener {
+            val dajeon_Intent = Intent(this, DajeonBoardActivity::class.java)
+            startActivity(dajeon_Intent)
+        }
+
     }
 
     private fun signOut(){
