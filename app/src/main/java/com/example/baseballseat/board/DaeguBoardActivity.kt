@@ -1,16 +1,20 @@
 package com.example.baseballseat.board
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.BoardData
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.LoginActivity
 import com.example.baseballseat.Post.DaeguPostActivity
+import com.example.baseballseat.R
 import com.example.baseballseat.UserData
 import com.example.baseballseat.databinding.ActivityDaeguBoardBinding
 import com.facebook.login.LoginManager
@@ -22,6 +26,9 @@ import com.google.firebase.ktx.Firebase
 class DaeguBoardActivity : AppCompatActivity() {
 
     /* 대구 삼성 라이온즈 파크 게시판 */
+    companion object{
+        const val LOCAL = "Daegu"
+    }
     private val TAG = "DaeguBoardActivity"
     private lateinit var db : FirebaseFirestore
     private lateinit var adapter : BoardDataAdapter
@@ -30,6 +37,7 @@ class DaeguBoardActivity : AppCompatActivity() {
     private lateinit var lastResult : DocumentSnapshot
     private var username = ""
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_daegu_board)
@@ -38,6 +46,8 @@ class DaeguBoardActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        window.statusBarColor = ContextCompat.getColor(this, R.color.Samsung)
+
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
@@ -45,7 +55,7 @@ class DaeguBoardActivity : AppCompatActivity() {
 
         binding.createBtn.setOnClickListener {
             val createpostIntent = Intent(this, DaeguPostActivity::class.java)
-            createpostIntent.putExtra("local","Daegu")
+            createpostIntent.putExtra("local",LOCAL)
             startActivity(createpostIntent)
         }
 
@@ -85,7 +95,7 @@ class DaeguBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView() {
-        val docRef = db.collection("Daegu")//대구 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//대구 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -100,7 +110,7 @@ class DaeguBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Daegu",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL ,imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -113,7 +123,7 @@ class DaeguBoardActivity : AppCompatActivity() {
 
     private fun add_RecyclerView() {
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Daegu")//대구 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//대구 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .startAfter(lastResult)
             .limit(5)
@@ -128,7 +138,7 @@ class DaeguBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Daegu",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL ,imageURI))
                 }
 
                 if(snapshot.size() > 0){

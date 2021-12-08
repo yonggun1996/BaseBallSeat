@@ -20,7 +20,6 @@ import androidx.core.net.toUri
 import com.example.baseballseat.R
 import com.example.baseballseat.UserData
 import com.example.baseballseat.databinding.ActivityCreatePostBinding
-import com.example.baseballseat.databinding.ActivityGocheokPostBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

@@ -1,16 +1,21 @@
 package com.example.baseballseat.board
 
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.BoardData
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.LoginActivity
 import com.example.baseballseat.Post.BusanPostActivity
+import com.example.baseballseat.R
 import com.example.baseballseat.UserData
 import com.example.baseballseat.databinding.ActivityBusanBoardBinding
 import com.facebook.login.LoginManager
@@ -22,6 +27,11 @@ import com.google.firebase.ktx.Firebase
 class BusanBoardActivity : AppCompatActivity() {
 
     /* 부산 사직 야구장 게시판 */
+
+    companion object{
+        const val LOCAL = "Busan"
+    }
+
     private val TAG = "BusanBoardActivity"
     private lateinit var binding: ActivityBusanBoardBinding
     private lateinit var db : FirebaseFirestore
@@ -30,6 +40,7 @@ class BusanBoardActivity : AppCompatActivity() {
     private var boardDataList = ArrayList<BoardData>()
     private var username = ""
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_busan_board)
@@ -37,6 +48,8 @@ class BusanBoardActivity : AppCompatActivity() {
         binding = ActivityBusanBoardBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.Lotte)
 
         db = FirebaseFirestore.getInstance()
 
@@ -46,7 +59,7 @@ class BusanBoardActivity : AppCompatActivity() {
         //추가 버튼 클릭시시
         binding.createBtn.setOnClickListener {
             val createpostIntent = Intent(this, BusanPostActivity::class.java)
-            createpostIntent.putExtra("local", "Busan")
+            createpostIntent.putExtra("local", LOCAL)
             startActivity(createpostIntent)
         }
 
@@ -86,7 +99,7 @@ class BusanBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView() {
-        val docRef = db.collection("Busan")//부산 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//부산 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -101,7 +114,7 @@ class BusanBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Busan",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL,imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -114,7 +127,7 @@ class BusanBoardActivity : AppCompatActivity() {
 
     private fun add_RecyclerView() {
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Busan")//부산 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//부산 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .startAfter(lastResult)
             .limit(5)
@@ -129,7 +142,7 @@ class BusanBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL ,imageURI))
                 }
 
                 if(snapshot.size() > 0){

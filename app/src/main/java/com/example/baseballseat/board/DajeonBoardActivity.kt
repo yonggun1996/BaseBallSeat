@@ -1,16 +1,20 @@
 package com.example.baseballseat.board
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.BoardData
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.LoginActivity
 import com.example.baseballseat.Post.DajeonPostActivity
+import com.example.baseballseat.R
 import com.example.baseballseat.UserData
 import com.example.baseballseat.databinding.ActivityBusanBoardBinding
 import com.example.baseballseat.databinding.ActivityDajeonBoardBinding
@@ -31,6 +35,7 @@ class DajeonBoardActivity : AppCompatActivity() {
     private var boardDataList = ArrayList<BoardData>()
     private var username = ""
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_dajeon_board)
@@ -39,6 +44,7 @@ class DajeonBoardActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        window.statusBarColor = ContextCompat.getColor(this, R.color.Hanhwa)
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
@@ -100,7 +106,7 @@ class DajeonBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Busan",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, "Dajeon",imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -128,7 +134,7 @@ class DajeonBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, "Dajeon",imageURI))
                 }
 
                 if(snapshot.size() > 0){

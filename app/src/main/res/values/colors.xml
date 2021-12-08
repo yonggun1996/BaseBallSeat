@@ -16,4 +16,5 @@
     <color name="Samsung">#0000FF</color>
     <color name="SSG">#FF0000</color>
     <color name="Hanhwa">#FF9100</color>
+    <color name="BasicStatusColor">#9EF048</color>
 </resources>

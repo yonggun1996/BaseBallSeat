@@ -1,10 +1,13 @@
 package com.example.baseballseat.board
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.BoardData
@@ -28,6 +31,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class SuwonBoardActivity : AppCompatActivity() {
+    companion object{
+        const val LOCAL = "Suwon"
+    }
     val TAG = "SuwonBoardActivity"
     val UPLOADSUCESSCODE = 9999
     var userData = UserData
@@ -38,6 +44,7 @@ class SuwonBoardActivity : AppCompatActivity() {
     private lateinit var db : FirebaseFirestore
     private lateinit var lastResult : DocumentSnapshot
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_suwon_board)
@@ -46,6 +53,7 @@ class SuwonBoardActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        window.statusBarColor = ContextCompat.getColor(this, R.color.KT)
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
@@ -55,7 +63,7 @@ class SuwonBoardActivity : AppCompatActivity() {
 
         binding.createBtn.setOnClickListener {
             val createpostIntent = Intent(this, CreateSuwonPostActivity::class.java)
-            createpostIntent.putExtra("local", "Suwon")
+            createpostIntent.putExtra("local", LOCAL)
 
             startActivity(createpostIntent)
         }
@@ -102,7 +110,7 @@ class SuwonBoardActivity : AppCompatActivity() {
 
     private fun add_RecyclerView(){
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Suwon")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//창원 구장에 대한 정보만 추출
                 .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
                 .startAfter(lastResult)
                 .limit(5)
@@ -117,7 +125,7 @@ class SuwonBoardActivity : AppCompatActivity() {
                         var date = doc.get("date").toString()
                         var username = doc.get("username").toString()
 
-                        boardDataList.add(BoardData(area, contents, seat, username, date, "Suwon",imageURI))
+                        boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL, imageURI))
                     }
 
                     if(snapshot.size() > 0){
@@ -130,7 +138,7 @@ class SuwonBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView(){
-        val docRef = db.collection("Suwon")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//창원 구장에 대한 정보만 추출
                 .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
                 .limit(5)
                 .addSnapshotListener  { snapshot, e ->
@@ -145,7 +153,7 @@ class SuwonBoardActivity : AppCompatActivity() {
                         var date = doc.get("date").toString()
                         var username = doc.get("username").toString()
 
-                        boardDataList.add(BoardData(area, contents, seat, username, date, "Suwon",imageURI))
+                        boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL, imageURI))
                     }
 
                     if(snapshot.size() > 0){

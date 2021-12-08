@@ -17,13 +17,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BaseBallSeat.NoActionBar">
+        android:theme="@style/Apptheme">
         <activity android:name=".Post.DajeonPostActivity"></activity>
         <activity android:name=".board.DajeonBoardActivity" />
         <activity android:name=".Post.IncheonPostActivity" />
         <activity android:name=".board.IncheonBoardActivity" />
         <activity android:name=".Post.DaeguPostActivity" />
-        <activity android:name=".Post.DaeguActivity" />
         <activity android:name=".board.DaeguBoardActivity" />
         <activity android:name=".Post.BusanPostActivity" />
         <activity android:name=".board.BusanBoardActivity" />
@@ -31,9 +30,6 @@
         <activity android:name=".board.GwangjuBoardActivity" />
         <activity android:name=".Post.GocheokPostActivity" />
         <activity android:name=".board.GocheokBoardActivity" />
-        <activity android:name=".UpdatePost.ChangwonUpdatePostActivity" />
-        <activity android:name=".UpdatePost.ChangwonUpdateActivity" />
-        <activity android:name=".Mydata.ChangwonMyDataActivity" />
         <activity android:name=".board.SuwonBoardActivity" />
         <activity android:name=".Post.CreateChangwonPostActivity" />
         <activity android:name=".board.ChangWonBoardActivity" />

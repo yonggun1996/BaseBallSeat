@@ -2,10 +2,13 @@ package com.example.baseballseat.board
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.BoardData
@@ -13,6 +16,7 @@ import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
 import com.example.baseballseat.LoginActivity
 import com.example.baseballseat.Post.BusanPostActivity
 import com.example.baseballseat.Post.IncheonPostActivity
+import com.example.baseballseat.R
 import com.example.baseballseat.UserData
 import com.example.baseballseat.databinding.ActivityBusanBoardBinding
 import com.example.baseballseat.databinding.ActivityCreatePostBinding
@@ -26,6 +30,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 class IncheonBoardActivity : AppCompatActivity() {
+    companion object{
+        const val LOCAL = "Incheon"
+    }
 
     /* 인천SSG랜더스필드 게시판 */
     private val TAG = "IncheonBoardActivity"
@@ -37,6 +44,7 @@ class IncheonBoardActivity : AppCompatActivity() {
     private var username = ""
 
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_incheon_board)
@@ -44,6 +52,8 @@ class IncheonBoardActivity : AppCompatActivity() {
         binding = ActivityIncheonBoardBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.SSG)
 
         db = FirebaseFirestore.getInstance()
 
@@ -53,7 +63,7 @@ class IncheonBoardActivity : AppCompatActivity() {
         //추가 버튼 클릭시
         binding.createBtn.setOnClickListener {
             val createpostIntent = Intent(this, IncheonPostActivity::class.java)
-            createpostIntent.putExtra("local","Incheon")
+            createpostIntent.putExtra("local",LOCAL)
             startActivity(createpostIntent)
         }
 
@@ -94,7 +104,7 @@ class IncheonBoardActivity : AppCompatActivity() {
 
     private fun add_RecyclerView() {
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Incheon")//부산 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//인천 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .startAfter(lastResult)
             .limit(5)
@@ -109,7 +119,7 @@ class IncheonBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL,imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -122,7 +132,7 @@ class IncheonBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView() {
-        val docRef = db.collection("Incheon")//부산 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//부산 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -137,7 +147,7 @@ class IncheonBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Busan",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL ,imageURI))
                 }
 
                 if(snapshot.size() > 0){

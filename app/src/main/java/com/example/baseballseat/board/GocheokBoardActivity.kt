@@ -1,10 +1,13 @@
 package com.example.baseballseat.board
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.BoardData
@@ -24,6 +27,9 @@ class GocheokBoardActivity : AppCompatActivity() {
 
     /* 고척 스카이돔 게시판 */
 
+    companion object{
+        const val LOCAL = "Gocheok"
+    }
     val UPLOADSUCESSCODE = 9999
     private val TAG = "GocheokBoardActivity"
     private lateinit var binding: ActivityGocheokBoardBinding
@@ -33,6 +39,7 @@ class GocheokBoardActivity : AppCompatActivity() {
     private var username = ""
     private lateinit var lastResult : DocumentSnapshot
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_gocheok_board_main)
@@ -41,6 +48,7 @@ class GocheokBoardActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        window.statusBarColor = ContextCompat.getColor(this, R.color.Kiwoom)
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
@@ -49,7 +57,7 @@ class GocheokBoardActivity : AppCompatActivity() {
         //플로팅 버튼 클릭시
         binding.createBtn.setOnClickListener {
             val createpostIntent = Intent(this, GocheokPostActivity::class.java)
-            createpostIntent.putExtra("local", "Gocheok")
+            createpostIntent.putExtra("local", LOCAL)
             startActivity(createpostIntent)
         }
 
@@ -100,7 +108,7 @@ class GocheokBoardActivity : AppCompatActivity() {
 
     private fun add_RecyclerView() {
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Gocheok")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//창원 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .startAfter(lastResult)
             .limit(5)
@@ -115,7 +123,7 @@ class GocheokBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Gocheok",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL,imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -128,7 +136,7 @@ class GocheokBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView() {
-        val docRef = db.collection("Gocheok")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//창원 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -143,7 +151,7 @@ class GocheokBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL ,imageURI))
                 }
 
                 if(snapshot.size() > 0){

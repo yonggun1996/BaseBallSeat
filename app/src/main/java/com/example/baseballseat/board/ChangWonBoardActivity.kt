@@ -1,10 +1,14 @@
 package com.example.baseballseat.board
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.*
@@ -21,6 +25,9 @@ import com.google.firebase.ktx.Firebase
 창원 NC파크 게시물 확인하는 페이지
  */
 class ChangWonBoardActivity : AppCompatActivity() {
+    companion object{
+        const val LOCAL = "Changwon"
+    }
     val TAG = "ChangWonBoardActivity"
     val UPLOADSUCESSCODE = 9999
     var userData = UserData
@@ -31,6 +38,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
     private lateinit var db : FirebaseFirestore
     private lateinit var lastResult : DocumentSnapshot
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,7 +47,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
         binding = ActivityChangWonBoardBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        window.statusBarColor = ContextCompat.getColor(this, R.color.NC)
         db = FirebaseFirestore.getInstance()
 
         binding.boardprogressBar.visibility = View.VISIBLE
@@ -49,7 +57,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
 
         binding.createBtn.setOnClickListener {
             val createpostIntent = Intent(this, CreateChangwonPostActivity::class.java)
-            createpostIntent.putExtra("local", "Changwon")
+            createpostIntent.putExtra("local", LOCAL)
 
             startActivityForResult(createpostIntent, UPLOADSUCESSCODE)
         }
@@ -103,7 +111,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
     //코드 출처 : https://www.youtube.com/watch?v=HQgJvHXsNOQ
     private fun add_RecyclerView(){
         Log.d(TAG, "lastResult : $lastResult")
-        val docRef = db.collection("Changwon")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//창원 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .startAfter(lastResult)
             .limit(5)
@@ -118,7 +126,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
                     var date = doc.get("date").toString()
                     var username = doc.get("username").toString()
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL, imageURI))
                 }
 
                 if(snapshot.size() > 0){
@@ -131,7 +139,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
     }
 
     private fun update_RecyclerView(){
-        val docRef = db.collection("Changwon")//창원 구장에 대한 정보만 추출
+        val docRef = db.collection(LOCAL)//창원 구장에 대한 정보만 추출
             .orderBy("date",com.google.firebase.firestore.Query.Direction.DESCENDING)//DB 역순으로 정렬
             .limit(5)
             .addSnapshotListener  { snapshot, e ->
@@ -148,7 +156,7 @@ class ChangWonBoardActivity : AppCompatActivity() {
                     var username = doc.get("username").toString()
                     //Log.d(TAG, "area : $area / seat : $seat / contents : $contents / imageURI : $imageURI / date : $date / username : $username")
 
-                    boardDataList.add(BoardData(area, contents, seat, username, date, "Changwon",imageURI))
+                    boardDataList.add(BoardData(area, contents, seat, username, date, LOCAL, imageURI))
                 }
 
                 lastResult = snapshot.documents.get(snapshot.size() - 1)
