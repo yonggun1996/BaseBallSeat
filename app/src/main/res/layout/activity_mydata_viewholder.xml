@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/myInfo_IV"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/myInfo_stadium_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:textSize="15sp"
+            android:text="구장"
+            app:layout_constraintStart_toEndOf="@+id/myInfo_IV"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/myInfo_seat_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="좌석"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/myInfo_IV"
+            app:layout_constraintTop_toBottomOf="@+id/myInfo_stadium_TV" />
+
+        <TextView
+            android:id="@+id/myInfo_area_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="구역"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/myInfo_IV"
+            app:layout_constraintTop_toBottomOf="@+id/myInfo_seat_TV" />
+
+        <TextView
+            android:id="@+id/myInfo_date_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="날짜"
+            app:layout_constraintStart_toEndOf="@+id/myInfo_IV"
+            app:layout_constraintTop_toBottomOf="@+id/myInfo_area_TV" />
+
+        <!-- 데이터 바인딩으로 가능할까? -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/delete_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/jamsilbtn"
+            android:text="삭제"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myInfo_date_TV" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/update_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/jamsilbtn"
+            android:text="수정"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/delete_Btn"
+            app:layout_constraintTop_toBottomOf="@+id/myInfo_date_TV"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

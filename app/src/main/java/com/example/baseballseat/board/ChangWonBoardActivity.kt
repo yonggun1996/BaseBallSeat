@@ -164,11 +164,4 @@ class ChangWonBoardActivity : AppCompatActivity() {
                 binding.boardprogressBar.visibility = View.INVISIBLE
             }
     }
-
-    //액티비티를 벗어나면 리스트에 있는 내용들을 지우고 다시 화면으로 돌아올 때 firebase의 데이터베이스에 데이터를 채운다.
-    override fun onStop() {
-        super.onStop()
-
-        Log.d(TAG, "boardDataList Clear")
-    }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.*
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
+import com.example.baseballseat.MyData.JamsilMydataActivity
 import com.example.baseballseat.Post.CreateChangwonPostActivity
 import com.example.baseballseat.Post.CreateJamsilPostActivity
 import com.example.baseballseat.R
@@ -68,6 +69,11 @@ class JamsilBoardActivity : AppCompatActivity() {
             createpostIntent.putExtra("local", LOCAL)
 
             startActivity(createpostIntent)
+        }
+
+        binding.myInfoBtn.setOnClickListener {
+            val myInfoIntent = Intent(this, JamsilMydataActivity::class.java)
+            startActivity(myInfoIntent)
         }
 
         //로그아웃 버튼 클릭시
@@ -168,11 +174,5 @@ class JamsilBoardActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()//어댑터가 변경된 부분이 있다면 변경
                 binding.boardprogressBar.visibility = View.INVISIBLE
             }
-    }
-
-    //액티비티를 벗어나면 리스트에 있는 내용들을 지우고 다시 화면으로 돌아올 때 firebase의 데이터베이스에 데이터를 채운다.
-    override fun onStop() {
-        super.onStop()
-        boardDataList.clear()
     }
 }

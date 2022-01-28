@@ -22,4 +22,13 @@
     <style name="Theme.BaseBallSeat.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.BaseBallSeat.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Apptheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Apptheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Apptheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BaseBallSeat</string>
+    <string name="app_name">야구장 자리 Review</string>
     <string name="title_activity_facebook_login">FacebookLogin</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -30,4 +30,5 @@
         <item>불펜가족석</item>
         <item>피크닉테이블석</item>
     </string-array>
+    <string name="title_activity_jamsil_my_data">JamsilMyDataActivity</string>
 </resources>
