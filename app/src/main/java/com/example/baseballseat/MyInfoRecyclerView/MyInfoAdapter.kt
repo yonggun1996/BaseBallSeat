@@ -1,12 +1,22 @@
 package com.example.baseballseat.MyInfoRecyclerView
 
+import android.app.AlertDialog
+import android.content.ContentValues
+import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.baseballseat.MyInfoData
 import com.example.baseballseat.R
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_mydata_viewholder.view.*
 
-class MyInfoAdapter(val itemList: ArrayList<MyInfoData>) : RecyclerView.Adapter<MyInfoDataViewHolder>(){
+class MyInfoAdapter(var itemList: ArrayList<MyInfoData>) : RecyclerView.Adapter<MyInfoDataViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyInfoDataViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
             .inflate(R.layout.activity_mydata_viewholder, parent, false)
@@ -17,13 +27,12 @@ class MyInfoAdapter(val itemList: ArrayList<MyInfoData>) : RecyclerView.Adapter<
     override fun onBindViewHolder(holder: MyInfoDataViewHolder, position: Int) {
         val item = itemList[position]
         holder.apply {
-            bind(item)
+            bind(item, itemList, position)
         }
     }
 
     override fun getItemCount(): Int {
         return itemList.size
     }
-
 
 }

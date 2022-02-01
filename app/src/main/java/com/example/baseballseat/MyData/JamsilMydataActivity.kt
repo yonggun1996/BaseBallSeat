@@ -34,39 +34,32 @@ class JamsilMydataActivity : AppCompatActivity() {
         setContentView(view)
 
         db = FirebaseFirestore.getInstance()
-        val info_List = get_Infodata()
+        val info_List = ArrayList<MyInfoData>()
+        //같은 유저가 올린 게시물만 확인하는 코드
+        val docRef = db.collection(LOCAL)
+                .whereEqualTo("User", userData.user?.uid.toString())
+                .addSnapshotListener { value, error ->
+                    info_List.clear()//데이터가 변경된 후 리스트가 다시 합쳐지는 과정을 거치기 때문에 for문을 돌기 전에 리스트를 비운다
+                    for(doc in value!!){
+                        val stadium = LOCAL
+                        val seat = doc.get("seat").toString()
+                        val area = doc.get("area").toString()
+                        val date = doc.get("date").toString()
+                        val imageURI = doc.get("imageURI").toString()
+                        Log.d(TAG, "Data : ${stadium} / ${seat} / ${area} / ${date} / ${imageURI} / ${doc.id}")
+
+                        info_List.add(MyInfoData(imageURI, stadium, date, seat, area, doc.id))//문서의 documentID도 포함시킨다
+                    }
+
+                    //어댑터 변경 감지
+                    adapter.notifyDataSetChanged()
+                }
+
         adapter = MyInfoAdapter(info_List)
+
         binding.myInfoRV.adapter = adapter
         binding.myInfoRV.layoutManager = LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.VERTICAL }
 
-    }
-
-    //현재 로그인된 유저가 업로드한 정보를 확인시켜주는 메서드
-    fun get_Infodata(): ArrayList<MyInfoData>{
-        val infoData_List = ArrayList<MyInfoData>()
-
-        Log.d(Companion.TAG, "get_Infodata")
-        //같은 유저가 올린 게시물만 확인하는 코드
-        val docRef = db.collection(LOCAL)
-            .whereEqualTo("User", userData.user?.uid.toString())
-            .addSnapshotListener { value, error ->
-                for(doc in value!!){
-                    val stadium = "잠실야구장"
-                    val seat = doc.get("seat").toString()
-                    val area = doc.get("area").toString()
-                    val date = doc.get("date").toString()
-                    val imageURI = doc.get("imageURI").toString()
-
-                    Log.d(TAG, "Data : ${stadium} / ${seat} / ${area} / ${date} / ${imageURI}")
-
-                    infoData_List.add(MyInfoData(imageURI, stadium, date, seat, area))
-                }
-
-                //어댑터 변경 감지
-                adapter.notifyDataSetChanged()
-            }
-
-        return infoData_List
     }
 
 }
