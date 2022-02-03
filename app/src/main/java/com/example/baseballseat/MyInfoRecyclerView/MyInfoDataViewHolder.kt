@@ -3,11 +3,13 @@ package com.example.baseballseat.MyInfoRecyclerView
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.DialogInterface
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.baseballseat.DataUpdate.UpdateJamsilActivity
 import com.example.baseballseat.MyInfoData
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,8 +17,8 @@ import kotlinx.android.synthetic.main.activity_mydata_viewholder.view.*
 
 class MyInfoDataViewHolder(v: View) : RecyclerView.ViewHolder(v){
     val view: View = v
+    val TAG = "MyInfoDataViewHolder"
     private lateinit var db: FirebaseFirestore
-    private lateinit var adapter: MyInfoAdapter
 
     fun bind(item: MyInfoData, itemList: ArrayList<MyInfoData>, position: Int){
         db = FirebaseFirestore.getInstance()
@@ -30,7 +32,6 @@ class MyInfoDataViewHolder(v: View) : RecyclerView.ViewHolder(v){
         view.myInfo_area_TV.text = item.area
         view.myInfo_date_TV.text = item.date
 
-        adapter = MyInfoAdapter(itemList)
         //삭제버튼 클릭시
         view.delete_Btn.setOnClickListener {
             val builder = AlertDialog.Builder(view.context)
@@ -56,6 +57,24 @@ class MyInfoDataViewHolder(v: View) : RecyclerView.ViewHolder(v){
 
             val alertDialog = builder.create()
             alertDialog.show()
+        }
+
+        //수정버튼 클릭시
+        view.update_Btn.setOnClickListener {
+            val docRef = db.collection(item.local).document(item.document)
+            docRef.get().addOnSuccessListener {
+                val map = HashMap<String, String>()
+                map["User"] = it["User"].toString()
+                map["area"] = it["area"].toString()
+                map["contents"] = it["contents"].toString()
+                map["date"] = it["date"].toString()
+                map["imageURI"] = it["imageURI"].toString()
+                map["seat"] = it["seat"].toString()
+
+                val intent = Intent(view.context, UpdateJamsilActivity::class.java)
+                intent.putExtra("map", map)
+                view.context.startActivity(intent)
+            }
         }
     }
 }
