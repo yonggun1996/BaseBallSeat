@@ -70,9 +70,12 @@ class MyInfoDataViewHolder(v: View) : RecyclerView.ViewHolder(v){
                 map["date"] = it["date"].toString()
                 map["imageURI"] = it["imageURI"].toString()
                 map["seat"] = it["seat"].toString()
+                map["username"] = it["username"].toString()
 
                 val intent = Intent(view.context, UpdateJamsilActivity::class.java)
                 intent.putExtra("map", map)
+                intent.putExtra("doc", item.document)
+                intent.putExtra("local", item.local)
                 view.context.startActivity(intent)
             }
         }
