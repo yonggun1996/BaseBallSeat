@@ -1,4 +1,4 @@
-package com.example.baseballseat.MyInfoRecyclerView
+package com.example.baseballseat.MyData.MyInfoRecyclerView
 
 import android.app.AlertDialog
 import android.content.ContentValues

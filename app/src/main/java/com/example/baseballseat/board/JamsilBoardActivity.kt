@@ -1,6 +1,5 @@
 package com.example.baseballseat.board
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -13,21 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.baseballseat.*
 import com.example.baseballseat.BoardRecyclerView.BoardDataAdapter
-import com.example.baseballseat.MyData.JamsilMydataActivity
-import com.example.baseballseat.Post.CreateChangwonPostActivity
+import com.example.baseballseat.MyData.UI.JamsilMydataActivity
 import com.example.baseballseat.Post.CreateJamsilPostActivity
 import com.example.baseballseat.R
-import com.example.baseballseat.databinding.ActivityChangWonBoardBinding
 import com.example.baseballseat.databinding.ActivityJamsilBoardBinding
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_chang_won_board.*
-import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 /*
 잠실야구장 게시물 확인하는 페이지

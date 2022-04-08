@@ -21,7 +21,7 @@
         <activity android:name=".DataUpdate.UpdateJamsilActivity"></activity>
         <activity android:name=".DataUpdate.JamsilUpdateActivity" />
         <activity android:name=".MainActivity2" />
-        <activity android:name=".MyData.JamsilMydataActivity" />
+        <activity android:name=".MyData.UI.JamsilMydataActivity" />
         <activity
             android:name=".MyData.JamsilMyDataActivity"
             android:label="@string/title_activity_jamsil_my_data"
